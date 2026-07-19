@@ -1,0 +1,10 @@
+# LoanMath
+Free US loan calculators with transparent, exact-cent math.
+
+## Tools
+- /mortgage-calculator: Mortgage payment with property tax, insurance, PMI (auto-drop at 80% LTV), HOA, and extra-payment savings.
+- /auto-loan-calculator: Car payment with trade-in, negative equity, state sales-tax rules, and fees.
+- /personal-loan-calculator: Personal loan payment with origination fee and effective APR.
+- /mortgage/{amount}-mortgage-payment: Payment tables for specific loan amounts across rates and terms.
+
+All calculations run client-side; formulas are documented on each page.
