@@ -70,6 +70,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <Link href="/mortgage-calculator">Mortgage</Link>
               <Link href="/auto-loan-calculator">Auto Loan</Link>
               <Link href="/personal-loan-calculator">Personal Loan</Link>
+              <Link href="/affordability-calculator">Affordability</Link>
             </nav>
             <Link href="/mortgage-calculator" className="nav-cta">Open calculator</Link>
           </div>
