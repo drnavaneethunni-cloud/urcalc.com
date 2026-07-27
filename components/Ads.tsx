@@ -1,56 +1,7 @@
 "use client";
 
-import Script from "next/script";
 import { useEffect, useState } from "react";
-
-/**
- * Falls back to this hardcoded publisher ID if NEXT_PUBLIC_ADSENSE_CLIENT_ID isn't set
- * in Vercel env vars. AdSense publisher IDs are public by design (visible in every
- * AdSense site's page source), so hardcoding here is safe.
- */
-const ADSENSE_CLIENT_ID = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID || "ca-pub-7705620892854606";
-
-const CONSENT_KEY = "urcalc-ad-consent"; // "granted" | "denied"
-
-/** Loads the AdSense library and sets up Google Consent Mode v2 with EU/UK defaults denied. */
-export function AdsenseScript() {
-  if (!ADSENSE_CLIENT_ID) return null;
-  return (
-    <>
-      <Script id="consent-default" strategy="beforeInteractive">
-        {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          window.gtag = gtag;
-          gtag('consent', 'default', {
-            ad_storage: 'denied',
-            ad_user_data: 'denied',
-            ad_personalization: 'denied',
-            analytics_storage: 'denied',
-            regions: ['GB','EU']
-          });
-          try {
-            var saved = localStorage.getItem('${CONSENT_KEY}');
-            if (saved === 'granted') {
-              gtag('consent', 'update', {
-                ad_storage: 'granted',
-                ad_user_data: 'granted',
-                ad_personalization: 'granted',
-                analytics_storage: 'granted'
-              });
-            }
-          } catch (e) {}
-        `}
-      </Script>
-      <Script
-        async
-        src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}`}
-        crossOrigin="anonymous"
-        strategy="afterInteractive"
-      />
-    </>
-  );
-}
+import { ADSENSE_CLIENT_ID, CONSENT_KEY } from "@/lib/adsConfig";
 
 /** A single display ad slot. Renders nothing if AdSense isn't configured yet. */
 export function AdUnit({ slot, format = "auto" }: { slot: string; format?: string }) {

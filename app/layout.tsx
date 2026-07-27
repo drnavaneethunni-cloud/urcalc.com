@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
-import { AdsenseScript, ConsentBanner } from "@/components/Ads";
+import { ConsentBanner } from "@/components/Ads";
+import { ADSENSE_CLIENT_ID, CONSENT_DEFAULT_SCRIPT } from "@/lib/adsConfig";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 
@@ -36,7 +37,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en-US" className={inter.variable}>
       <head>
-        <AdsenseScript />
+        {ADSENSE_CLIENT_ID ? (
+          <>
+            <script dangerouslySetInnerHTML={{ __html: CONSENT_DEFAULT_SCRIPT }} />
+            <script
+              async
+              src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}`}
+              crossOrigin="anonymous"
+            />
+          </>
+        ) : null}
       </head>
       <body>
         <script
