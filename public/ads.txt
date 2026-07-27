@@ -1,8 +1,1 @@
-# UrCalc — Authorized Digital Sellers file
-# https://iabtechlab.com/ads-txt/
-#
-# TODO: once Google AdSense approves this site and issues a publisher ID,
-# add the line Google's AdSense dashboard shows you (Sites → urcalc.com),
-# it will look like:
-#
-# google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0
+google.com, pub-7705620892854606, DIRECT, f08c47fec0942fa0

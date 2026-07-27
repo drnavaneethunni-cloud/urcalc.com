@@ -4,11 +4,11 @@ import Script from "next/script";
 import { useEffect, useState } from "react";
 
 /**
- * Set NEXT_PUBLIC_ADSENSE_CLIENT_ID in Vercel → Project Settings → Environment
- * Variables once the AdSense account is approved (format: "ca-pub-XXXXXXXXXXXXXXXX").
- * Until it's set, no AdSense script loads and no ad slots render — safe to ship now.
+ * Falls back to this hardcoded publisher ID if NEXT_PUBLIC_ADSENSE_CLIENT_ID isn't set
+ * in Vercel env vars. AdSense publisher IDs are public by design (visible in every
+ * AdSense site's page source), so hardcoding here is safe.
  */
-const ADSENSE_CLIENT_ID = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID;
+const ADSENSE_CLIENT_ID = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID || "ca-pub-7705620892854606";
 
 const CONSENT_KEY = "urcalc-ad-consent"; // "granted" | "denied"
 
