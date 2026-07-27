@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { JsonLd, SITE } from "@/components/seo";
+import { AdUnit } from "@/components/Ads";
 
 const siteSchema = {
   "@context": "https://schema.org",
@@ -82,6 +83,8 @@ export default function Home() {
           </Link>
         ))}
       </div>
+
+      <AdUnit slot="0000000002" />
 
       <div style={{ padding: "32px 0 48px", borderTop: "1px solid var(--line)", marginTop: 0 }}>
         <div className="eyebrow">Popular calculations</div>

@@ -5,6 +5,7 @@ import MortgageCalc from "@/components/MortgageCalc";
 import { JsonLd, breadcrumbSchema, calculatorSchema, Faq, Disclaimer } from "@/components/seo";
 import { amortize, monthlyPaymentC, toCents } from "@/lib/finance";
 import { fmtC, fmtCents } from "@/lib/format";
+import { AdUnit } from "@/components/Ads";
 
 /** Loan amounts to pre-render. Each becomes its own indexable landing page. */
 const AMOUNTS = [
@@ -121,6 +122,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       <MortgageCalc preset={{ homePrice: Math.round(amount / 0.8), downPayment: Math.round(amount / 0.8) - amount, rate: 6.5, termYears: 30 }} />
 
       <Faq items={faqs} />
+
+      <AdUnit slot="0000000001" />
 
       <h2>Other loan amounts</h2>
       <div className="related">

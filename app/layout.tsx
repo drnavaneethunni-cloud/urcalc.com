@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
+import { AdsenseScript, ConsentBanner } from "@/components/Ads";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 
@@ -34,6 +35,9 @@ const orgSchema = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en-US" className={inter.variable}>
+      <head>
+        <AdsenseScript />
+      </head>
       <body>
         <script
           type="application/ld+json"
@@ -68,8 +72,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               approximations; confirm exact figures with your lender before making decisions.
             </div>
             <div>© {new Date().getFullYear()} UrCalc. All calculations run in your browser — no financial data is sent to our servers.</div>
+            <div className="footer-links">
+              <Link href="/privacy-policy">Privacy Policy</Link>
+              <Link href="/terms">Terms of Service</Link>
+            </div>
           </div>
         </footer>
+        <ConsentBanner />
       </body>
     </html>
   );
