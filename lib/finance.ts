@@ -232,7 +232,6 @@ export interface PersonalLoanResult extends AmortResult {
   /** Effective APR including the origination fee */
   effectiveAprPct: number;
 }
-
 export function personalLoan(inp: PersonalLoanInputs): PersonalLoanResult {
   const amount = clampNum(inp.amount, 0, 1e7, 0);
   const feePct = clampNum(inp.originationFeePct, 0, 12, 0);
@@ -261,4 +260,101 @@ export function personalLoan(inp: PersonalLoanInputs): PersonalLoanResult {
   }
 
   return { ...base, feeC, disbursedC, effectiveAprPct };
+}
+
+export interface AffordabilityInputs {
+  annualIncome: number;
+  /** Existing monthly debt payments: car loans, student loans, credit cards, etc. */
+  monthlyDebts: number;
+  downPayment: number;
+  annualRatePct: number;
+  termYears: number;
+  /** Property tax as % of home price per year */
+  propertyTaxPctAnnual: number;
+  /** Home insurance as % of home price per year */
+  insurancePctAnnual: number;
+  hoaMonthly: number;
+  /** Annual PMI rate as % of loan amount; applied while down payment < 20% */
+  pmiRatePct: number;
+  /** Front-end DTI ceiling: housing payment as % of gross monthly income (default 28) */
+  frontEndRatioPct: number;
+  /** Back-end DTI ceiling: housing payment + other debts as % of gross monthly income (default 36) */
+  backEndRatioPct: number;
+}
+
+export interface AffordabilityResult {
+  maxHomePriceC: number;
+  maxLoanC: number;
+  /** The lower of the front-end and back-end derived payment caps — the binding constraint */
+  maxMonthlyPaymentC: number;
+  bindingConstraint: "front-end" | "back-end";
+  piC: number;
+  taxMonthlyC: number;
+  insuranceMonthlyC: number;
+  hoaMonthlyC: number;
+  pmiMonthlyC: number;
+  /** Resulting front-end ratio (housing / gross income) at the max home price, as % */
+  frontEndDTIPct: number;
+  /** Resulting back-end ratio (housing + debts / gross income) at the max home price, as % */
+  backEndDTIPct: number;
+}
+
+export function affordability(inp: AffordabilityInputs): AffordabilityResult {
+  const monthlyIncome = clampNum(inp.annualIncome, 0, 1e10, 0) / 12;
+  const frontRatio = clampNum(inp.frontEndRatioPct, 1, 100, 28) / 100;
+  const backRatio = clampNum(inp.backEndRatioPct, 1, 100, 36) / 100;
+  const debts = clampNum(inp.monthlyDebts, 0, 1e8, 0);
+
+  const frontCap = monthlyIncome * frontRatio;
+  const backCap = monthlyIncome * backRatio - debts;
+  const maxPayment = Math.max(0, Math.min(frontCap, backCap));
+  const maxPaymentC = toCents(maxPayment);
+  const binding: "front-end" | "back-end" = frontCap <= backCap ? "front-end" : "back-end";
+
+  const down = clampNum(inp.downPayment, 0, 1e10, 0);
+  const rate = clampNum(inp.annualRatePct, 0, 30, 0);
+  const months = Math.round(clampNum(inp.termYears, 1, 50, 30) * 12);
+  const taxPct = clampNum(inp.propertyTaxPctAnnual, 0, 10, 0) / 100;
+  const insPct = clampNum(inp.insurancePctAnnual, 0, 10, 0) / 100;
+  const hoaC = toCents(clampNum(inp.hoaMonthly, 0, 1e7, 0));
+  const pmiPct = clampNum(inp.pmiRatePct, 0, 5, 0) / 100;
+
+  function breakdownAt(homePrice: number) {
+    const homePriceC = toCents(homePrice);
+    const loanC = toCents(Math.max(0, homePrice - down));
+    const piC = monthlyPaymentC(loanC, rate, months);
+    const taxC = Math.round((homePriceC * taxPct) / 12);
+    const insC = Math.round((homePriceC * insPct) / 12);
+    const ltv = homePrice > 0 ? down / homePrice : 1;
+    const pmiC = pmiPct > 0 && ltv < 0.2 ? Math.round((loanC * pmiPct) / 12) : 0;
+    return { loanC, piC, taxC, insC, pmiC, totalC: piC + taxC + insC + hoaC + pmiC };
+  }
+
+  // Binary search the highest home price whose total monthly cost stays within the cap.
+  let lo = down;
+  let hi = down + 1e8;
+  for (let i = 0; i < 60; i++) {
+    const mid = (lo + hi) / 2;
+    if (breakdownAt(mid).totalC <= maxPaymentC) lo = mid;
+    else hi = mid;
+  }
+  const homePrice = lo;
+  const b = breakdownAt(homePrice);
+
+  const frontEndDTIPct = monthlyIncome > 0 ? (b.totalC / 100 / monthlyIncome) * 100 : 0;
+  const backEndDTIPct = monthlyIncome > 0 ? ((b.totalC / 100 + debts) / monthlyIncome) * 100 : 0;
+
+  return {
+    maxHomePriceC: toCents(homePrice),
+    maxLoanC: b.loanC,
+    maxMonthlyPaymentC: maxPaymentC,
+    bindingConstraint: binding,
+    piC: b.piC,
+    taxMonthlyC: b.taxC,
+    insuranceMonthlyC: b.insC,
+    hoaMonthlyC: hoaC,
+    pmiMonthlyC: b.pmiC,
+    frontEndDTIPct,
+    backEndDTIPct,
+  };
 }

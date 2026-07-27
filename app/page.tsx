@@ -30,6 +30,12 @@ const icons = {
       <circle cx="10" cy="7" r="3" stroke="currentColor" strokeWidth="1.4" />
     </svg>
   ),
+  afford: (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+      <circle cx="10" cy="10" r="7.5" stroke="currentColor" strokeWidth="1.4" />
+      <path d="M10 5.5v9M12.3 7.6c0-1-1-1.6-2.3-1.6s-2.4.6-2.4 1.7c0 2.2 4.7 1 4.7 3.2 0 1.1-1.1 1.7-2.4 1.7s-2.3-.6-2.3-1.6" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+    </svg>
+  ),
 };
 
 const tools = [
@@ -52,6 +58,12 @@ const tools = [
     title: "Personal Loan Calculator",
     icon: icons.personal,
     desc: "Origination fee and effective APR, so you can compare offers on the number that actually matters.",
+  },
+  {
+    href: "/affordability-calculator",
+    title: "Affordability Calculator",
+    icon: icons.afford,
+    desc: "How much house you can afford using the standard 28/36 debt-to-income rule.",
   },
 ];
 

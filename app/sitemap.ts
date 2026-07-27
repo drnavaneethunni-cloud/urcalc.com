@@ -9,7 +9,7 @@ const AMOUNTS = [
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
-  const core = ["", "/mortgage-calculator", "/auto-loan-calculator", "/personal-loan-calculator"].map(
+  const core = ["", "/mortgage-calculator", "/auto-loan-calculator", "/personal-loan-calculator", "/affordability-calculator"].map(
     (p) => ({
       url: `${SITE}${p}`,
       lastModified: now,

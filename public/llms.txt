@@ -1,10 +1,14 @@
-# LoanMath
-Free US loan calculators with transparent, exact-cent math.
+# UrCalc
+
+> Free loan calculators for US borrowers — mortgage, auto, personal loan, and home affordability, computed to the exact cent, with full amortization schedules. No ads on calculators, no registration, no rounding.
 
 ## Tools
-- /mortgage-calculator: Mortgage payment with property tax, insurance, PMI (auto-drop at 80% LTV), HOA, and extra-payment savings.
-- /auto-loan-calculator: Car payment with trade-in, negative equity, state sales-tax rules, and fees.
-- /personal-loan-calculator: Personal loan payment with origination fee and effective APR.
-- /mortgage/{amount}-mortgage-payment: Payment tables for specific loan amounts across rates and terms.
+- [Mortgage Calculator](https://urcalc.com/mortgage-calculator): Monthly payment including principal, interest, property tax, home insurance, PMI (auto-drops at 80% loan-to-value), and HOA, plus exact interest savings from extra payments.
+- [Auto Loan Calculator](https://urcalc.com/auto-loan-calculator): Car payment including trade-in value, negative equity rollover, state sales-tax rules, and dealer fees.
+- [Personal Loan Calculator](https://urcalc.com/personal-loan-calculator): Loan payment including origination fee and effective APR (true cost of borrowing including fees).
+- [Affordability Calculator](https://urcalc.com/affordability-calculator): Maximum home price using the standard 28/36 front-end/back-end debt-to-income rule, with full monthly cost breakdown.
 
-All calculations run client-side; formulas are documented on each page.
+## Optional
+- [$350,000 Mortgage Payment](https://urcalc.com/mortgage/350000-mortgage-payment): Example of the payment-by-rate-and-term tables available for loan amounts from $100,000 to $1,000,000 at /mortgage/{amount}-mortgage-payment.
+
+All calculations run client-side in the browser; no financial data is transmitted to any server. Formulas are shown inline on each calculator page.

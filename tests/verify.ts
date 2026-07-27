@@ -1,4 +1,4 @@
-import { amortize, mortgage, autoLoan, personalLoan, monthlyPaymentC } from "../lib/finance";
+import { amortize, mortgage, autoLoan, personalLoan, affordability, monthlyPaymentC } from "../lib/finance";
 
 let pass = 0, fail = 0;
 function eq(name: string, got: number, want: number, tol = 1) {
@@ -72,6 +72,36 @@ eq("garbage mortgage safe", Number.isFinite(g2.allInMonthlyC) ? 1 : 0, 1, 0);
 // 13. Payment-below-interest guard terminates
 const t = amortize(1000000, 30, 1200);
 eq("extreme loan terminates", t.payoffMonths <= 1200 ? 1 : 0, 1, 0);
+
+// 14. Affordability: known scenario — $100k/yr income, no other debts, 20% down, 6.5%/30yr,
+// 1.1% tax, 0.4% insurance, no HOA. Front-end (28%) should bind since back-end room is larger.
+const aff1 = affordability({
+  annualIncome: 100000, monthlyDebts: 0, downPayment: 80000, annualRatePct: 6.5, termYears: 30,
+  propertyTaxPctAnnual: 1.1, insurancePctAnnual: 0.4, hoaMonthly: 0, pmiRatePct: 0.6,
+  frontEndRatioPct: 28, backEndRatioPct: 36,
+});
+eq("affordability front-end binds", aff1.bindingConstraint === "front-end" ? 1 : 0, 1, 0);
+eq("affordability front-end DTI near 28%", aff1.frontEndDTIPct, 28, 0.5);
+eq("affordability no PMI at 20%+ implied down", aff1.pmiMonthlyC, 0, 0);
+eq("affordability home price positive", aff1.maxHomePriceC > 0 ? 1 : 0, 1, 0);
+
+// 15. Affordability: heavy existing debt should force back-end to bind instead.
+const aff2 = affordability({
+  annualIncome: 100000, monthlyDebts: 1500, downPayment: 80000, annualRatePct: 6.5, termYears: 30,
+  propertyTaxPctAnnual: 1.1, insurancePctAnnual: 0.4, hoaMonthly: 0, pmiRatePct: 0.6,
+  frontEndRatioPct: 28, backEndRatioPct: 36,
+});
+eq("affordability back-end binds with heavy debt", aff2.bindingConstraint === "back-end" ? 1 : 0, 1, 0);
+eq("affordability lower price with more debt", aff2.maxHomePriceC < aff1.maxHomePriceC ? 1 : 0, 1, 0);
+
+// 16. Affordability: zero income is safe, not NaN/crash.
+const aff3 = affordability({
+  annualIncome: 0, monthlyDebts: 0, downPayment: 0, annualRatePct: 6.5, termYears: 30,
+  propertyTaxPctAnnual: 1.1, insurancePctAnnual: 0.4, hoaMonthly: 0, pmiRatePct: 0.6,
+  frontEndRatioPct: 28, backEndRatioPct: 36,
+});
+eq("affordability zero income safe", Number.isFinite(aff3.maxHomePriceC) ? 1 : 0, 1, 0);
+eq("affordability zero income zero price", aff3.maxHomePriceC, 0, 100);
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

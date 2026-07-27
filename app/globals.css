@@ -138,13 +138,19 @@ h3 { font-size: 16px; margin: 24px 0 8px; font-weight: 600; }
   display: grid; grid-template-columns: 1fr; border-top: 1px solid var(--line);
   margin-top: 8px;
 }
-@media (min-width: 780px) { .tool-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 560px) { .tool-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 960px) { .tool-grid { grid-template-columns: repeat(4, 1fr); } }
 .tool-card {
   padding: 30px 28px 32px; border-bottom: 1px solid var(--line); color: var(--ink);
   display: block;
 }
-@media (min-width: 780px) {
-  .tool-card { border-bottom: none; border-right: 1px solid var(--line); }
+@media (min-width: 560px) {
+  .tool-card { border-bottom: 1px solid var(--line); border-right: 1px solid var(--line); }
+  .tool-card:nth-child(2n) { border-right: none; }
+}
+@media (min-width: 960px) {
+  .tool-card { border-bottom: none; }
+  .tool-card:nth-child(2n) { border-right: 1px solid var(--line); }
   .tool-card:last-child { border-right: none; }
 }
 .tool-card:hover { background: var(--card); text-decoration: none; }

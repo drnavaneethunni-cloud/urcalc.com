@@ -70,6 +70,7 @@ export default function Page() {
       <div className="related">
         <Link href="/auto-loan-calculator">Auto loan calculator</Link>
         <Link href="/personal-loan-calculator">Personal loan calculator</Link>
+        <Link href="/affordability-calculator">Affordability calculator</Link>
       </div>
 
       <Disclaimer />
