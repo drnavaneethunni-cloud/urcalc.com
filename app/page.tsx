@@ -83,7 +83,7 @@ export default function Home() {
       <div className="tool-grid">
         {tools.map((t) => (
           <Link key={t.href} href={t.href} className="tool-card">
-            <div className={`tool-icon${t.featured ? " featured" : ""}`} style={{ color: t.featured ? "#F9F8F5" : "var(--ink)" }}>
+            <div className="tool-icon" style={{ color: "#F9F8F5" }}>
               {t.icon}
             </div>
             <h3>
