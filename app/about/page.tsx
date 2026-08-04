@@ -73,6 +73,14 @@ export default function AboutPage() {
         debt-to-income guideline that most conventional mortgage lenders apply, and returns
         whichever ratio is more restrictive for the numbers you enter.
       </p>
+      <p>
+        <strong>Rent vs. buy:</strong> a month-by-month simulation where whoever pays less for
+        housing invests the difference, the renter starts with the buyer's down payment and
+        closing costs already invested, and both sides pay capital gains tax on invested growth
+        at the end. A second, optional layer weighs non-financial factors — flexibility,
+        stability, control, and upkeep — against the dollar result using a simplified version of
+        the Analytic Hierarchy Process.
+      </p>
 
       <h2>Default assumptions</h2>
       <p>
@@ -86,10 +94,13 @@ export default function AboutPage() {
       <h2>Editorial standards</h2>
       <p>
         UrCalc does not accept payment to alter a calculation, feature a lender, or change a
-        result. The three calculator tool pages carry no advertising by design. Content is
+        result. The five calculator tool pages (mortgage, auto loan, personal loan,
+        affordability, and rent vs. buy) carry no advertising by design; the programmatic
+        landing pages under <code>/mortgage/</code> and <code>/rent-vs-buy/</code> do carry ads,
+        placed below the calculator result and after the FAQ, never above it. Content is
         reviewed for formula accuracy against publicly documented lending rules (PMI
         cancellation thresholds, standard DTI guidelines, state sales-tax treatment of
-        trade-ins) rather than opinion.
+        trade-ins, current-year standard deduction and SALT cap figures) rather than opinion.
       </p>
 
       <h2>Privacy by construction</h2>
@@ -117,6 +128,7 @@ export default function AboutPage() {
         <Link href="/auto-loan-calculator">Auto loan calculator</Link>
         <Link href="/personal-loan-calculator">Personal loan calculator</Link>
         <Link href="/affordability-calculator">Affordability calculator</Link>
+        <Link href="/rent-vs-buy-calculator">Rent vs. buy calculator</Link>
       </div>
     </div>
   );

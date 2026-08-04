@@ -248,3 +248,50 @@ export function ShareButtons({ shareUrl }: { shareUrl: string }) {
     </div>
   );
 }
+
+
+/** Discrete labeled slider for the rent-vs-buy preference layer: a fixed
+ *  step range with the current step's plain-English meaning shown live. */
+export function DiscreteSlider({
+  label,
+  value,
+  onChange,
+  min,
+  max,
+  leftLabel,
+  rightLabel,
+  wording,
+}: {
+  label: string;
+  value: number;
+  onChange: (v: number) => void;
+  min: number;
+  max: number;
+  leftLabel: string;
+  rightLabel: string;
+  wording: string;
+}) {
+  return (
+    <div className="field slider-field">
+      <label>
+        <span>{label}</span>
+      </label>
+      <input
+        type="range"
+        className="slider"
+        min={min}
+        max={max}
+        step={1}
+        value={value}
+        onChange={(e) => onChange(Number(e.target.value))}
+        aria-label={label}
+        aria-valuetext={wording}
+      />
+      <div className="slider-scale">
+        <span>{leftLabel}</span>
+        <span>{rightLabel}</span>
+      </div>
+      <div className="slider-value" aria-live="polite">{wording}</div>
+    </div>
+  );
+}

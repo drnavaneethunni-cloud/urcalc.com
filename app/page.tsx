@@ -36,6 +36,12 @@ const icons = {
       <path d="M10 5.5v9M12.3 7.6c0-1-1-1.6-2.3-1.6s-2.4.6-2.4 1.7c0 2.2 4.7 1 4.7 3.2 0 1.1-1.1 1.7-2.4 1.7s-2.3-.6-2.3-1.6" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
     </svg>
   ),
+  rentBuy: (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+      <path d="M2.5 17.5h15M4 17.5V8l4-3 4 3v9.5M12.5 17.5v-6h3.5v6" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" />
+      <path d="M6.5 11.5h1.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+    </svg>
+  ),
 };
 
 const tools = [
@@ -65,6 +71,13 @@ const tools = [
     icon: icons.afford,
     desc: "How much house you can afford using the standard 28/36 debt-to-income rule.",
   },
+  {
+    href: "/rent-vs-buy-calculator",
+    title: "Rent vs. Buy Calculator",
+    tag: "New",
+    icon: icons.rentBuy,
+    desc: "The full financial comparison, plus what matters to you — flexibility, stability, and control.",
+  },
 ];
 
 export default function Home() {
@@ -72,7 +85,7 @@ export default function Home() {
     <div className="container">
       <JsonLd data={siteSchema} />
       <div className="hero">
-        <div className="hero-badge">Free · No ads on calculators · No registration</div>
+        <div className="hero-badge">Free · No ads on calculator tools · No registration</div>
         <h1>Calculate any loan.<br />Understand every payment.</h1>
         <p className="lede">
           Precise calculators for mortgages, auto loans, and personal loans. No rounding, no
@@ -106,6 +119,9 @@ export default function Home() {
               ${k}K mortgage payment
             </Link>
           ))}
+          <Link href="/rent-vs-buy/350000-home">$350K rent vs. buy</Link>
+          <Link href="/rent-vs-buy/500000-home">$500K rent vs. buy</Link>
+          <Link href="/guides/rent-vs-buy">Rent vs. buy guide</Link>
         </div>
       </div>
     </div>

@@ -13,9 +13,13 @@ dependencies beyond React. All 31 pages statically pre-rendered; ~114 KB first l
   rate-by-term tables, tailored FAQs, and embedded calculator presets
 - Full amortization schedules (yearly/monthly toggle), pure-SVG balance charts,
   shareable URLs, print/PDF mode
-- Schema.org (WebApplication, FAQPage, BreadcrumbList, Organization, WebSite),
+- Rent vs. buy calculator: full amortization + tax/opportunity-cost financial model, plus a
+  reduced Analytic Hierarchy Process layer weighing flexibility, stability, control, and upkeep
+  against the dollar result. 12 programmatic price-point pages (/rent-vs-buy/{price}-home) and
+  a ~1,700-word pillar guide (/guides/rent-vs-buy)
+- Schema.org (WebApplication, FAQPage, BreadcrumbList, Organization, WebSite, Article),
   sitemap.xml, robots.txt, llms.txt, canonical URLs
-- Integer-cent math engine, 26 passing verification tests (tests/verify.ts)
+- Integer-cent math engine, 52 passing verification tests (tests/verify.ts)
 
 ## Monetization
 - Privacy Policy (`/privacy-policy`) and Terms (`/terms`) — required for AdSense approval
@@ -24,8 +28,10 @@ dependencies beyond React. All 31 pages statically pre-rendered; ~114 KB first l
   defaults denied for GB/EU, granted on accept). Everything here is inert until
   `NEXT_PUBLIC_ADSENSE_CLIENT_ID` is set — no script loads, no ad slots render, no
   consent banner shows.
-- Ad slots placed on the homepage and the `/mortgage/{amount}-mortgage-payment` pages
-  only. The three calculator tool pages stay ad-free by design.
+- Ad slots placed on the homepage, the `/mortgage/{amount}-mortgage-payment` pages, the
+  `/rent-vs-buy/{price}-home` pages, and the `/guides/rent-vs-buy` guide. The five calculator
+  tool pages (mortgage, auto loan, personal loan, affordability, rent vs. buy) stay ad-free by
+  design.
 
 ## Deploy
 1. `npm install && npm run build` locally to confirm.
@@ -41,5 +47,5 @@ dependencies beyond React. All 31 pages statically pre-rendered; ~114 KB first l
 - Queries entering positions 10–30
 
 ## Phase 2 (only after the gate passes)
-Refinance, extra-payment standalone, affordability, rent-vs-buy; then
-auto-amount programmatic pages. Architecture already supports drop-in routes.
+Affordability and rent-vs-buy shipped. Remaining: refinance calculator, extra-payment
+standalone. Architecture already supports drop-in routes.

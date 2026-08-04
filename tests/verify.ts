@@ -1,4 +1,5 @@
 import { amortize, mortgage, autoLoan, personalLoan, affordability, monthlyPaymentC } from "../lib/finance";
+import { rentVsBuy, computeAhp, weightStepToRatio, directionStepToBuyShare, DEFAULT_RENT_VS_BUY_INPUTS, AHP_FACTORS } from "../lib/rentVsBuy";
 
 let pass = 0, fail = 0;
 function eq(name: string, got: number, want: number, tol = 1) {
@@ -102,6 +103,62 @@ const aff3 = affordability({
 });
 eq("affordability zero income safe", Number.isFinite(aff3.maxHomePriceC) ? 1 : 0, 1, 0);
 eq("affordability zero income zero price", aff3.maxHomePriceC, 0, 100);
+
+// 17. Rent vs buy: buying a home priced far below comparable rent, with generous
+// appreciation and a long horizon, should favor buying by the end.
+const rvb1 = rentVsBuy({
+  ...DEFAULT_RENT_VS_BUY_INPUTS,
+  homePrice: 250000, monthlyRent: 2200, yearsStaying: 10, appreciationPct: 4, investmentReturnPct: 5,
+});
+eq("rent-vs-buy produces one row per year", rvb1.rows.length, 10, 0);
+eq("rent-vs-buy favors buying when rent is steep vs price", rvb1.headline === "buying" ? 1 : 0, 1, 0);
+eq("rent-vs-buy final diff positive when buying wins", rvb1.finalDiff > 0 ? 1 : 0, 1, 0);
+
+// 18. Rent vs buy: a cheap rent relative to a pricey home, low appreciation, should favor renting.
+const rvb2 = rentVsBuy({
+  ...DEFAULT_RENT_VS_BUY_INPUTS,
+  homePrice: 900000, monthlyRent: 1800, yearsStaying: 5, appreciationPct: 1, investmentReturnPct: 8,
+});
+eq("rent-vs-buy favors renting when rent is cheap vs price", rvb2.headline === "renting" ? 1 : 0, 1, 0);
+
+// 19. Rent vs buy: equity after selling never exceeds home value (selling costs + loan balance
+// are always subtracted).
+const lastRow = rvb1.rows[rvb1.rows.length - 1];
+eq("equity after selling below home value", lastRow.equityAfterSelling < lastRow.homeValue ? 1 : 0, 1, 0);
+
+// 20. Rent vs buy: garbage/zero inputs stay finite, no crash.
+const rvbSafe = rentVsBuy({ ...DEFAULT_RENT_VS_BUY_INPUTS, homePrice: 0, monthlyRent: 0, yearsStaying: 1 });
+eq("rent-vs-buy zero inputs safe", Number.isFinite(rvbSafe.finalDiff) ? 1 : 0, 1, 0);
+
+// 21. AHP: step 0 is a 1:1 ratio (equal weight to money); larger |step| grows the ratio.
+eq("AHP step 0 ratio is 1", weightStepToRatio(0), 1, 0.001);
+eq("AHP step +7 ratio is 8", weightStepToRatio(7), 8, 0.001);
+eq("AHP step -7 ratio is 1/8", weightStepToRatio(-7), 1 / 8, 0.001);
+
+// 22. AHP: direction step 0 is neutral (0.5); extremes approach 0/1.
+eq("AHP direction 0 is neutral", directionStepToBuyShare(0), 0.5, 0.001);
+eq("AHP direction +7 is 1", directionStepToBuyShare(7), 1, 0.001);
+eq("AHP direction -7 is 0", directionStepToBuyShare(-7), 0, 0.001);
+
+// 23. AHP: weights across money + 4 factors always sum to 1.
+const factorStates = AHP_FACTORS.map((f) => ({ key: f.key, weightStep: -2, directionStep: 0 }));
+const ahp1 = computeAhp(factorStates, 50000, 400000, "buying");
+const weightSum = ahp1.weights.reduce((s, w) => s + w.weight, 0);
+eq("AHP weights sum to 1", weightSum, 1, 0.001);
+eq("AHP buy+rent score sum to 1", ahp1.buyScore + ahp1.rentScore, 1, 0.001);
+
+// 24. AHP: cranking every factor's weight and direction fully toward "buy" should push the
+// combined score decisively toward buying, even if money alone said renting.
+const strongBuyFactors = AHP_FACTORS.map((f) => ({ key: f.key, weightStep: 7, directionStep: 7 }));
+const ahp2 = computeAhp(strongBuyFactors, -50000, 400000, "renting");
+eq("AHP strong buy preferences push score toward buy", ahp2.buyScore > 0.85 ? 1 : 0, 1, 0);
+eq("AHP strong preferences flip a renting money-verdict", ahp2.state === "flip" ? 1 : 0, 1, 0);
+
+// 25. AHP: near-zero weights and a small money gap should land close to 50/50.
+const neutralFactors = AHP_FACTORS.map((f) => ({ key: f.key, weightStep: 0, directionStep: 0 }));
+const ahp3 = computeAhp(neutralFactors, 100, 400000, "even");
+eq("AHP all-neutral is close to 50/50", Math.abs(ahp3.buyScore - 0.5) < 0.05 ? 1 : 0, 1, 0);
+eq("AHP all-neutral state is close", ahp3.state === "close" ? 1 : 0, 1, 0);
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
