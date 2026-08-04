@@ -9,19 +9,25 @@ const AMOUNTS = [
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
-  const core = ["", "/mortgage-calculator", "/auto-loan-calculator", "/personal-loan-calculator", "/affordability-calculator"].map(
+  const core = ["", "/mortgage-calculator", "/auto-loan-calculator", "/personal-loan-calculator", "/affordability-calculator", "/about"].map(
     (p) => ({
       url: `${SITE}${p}`,
       lastModified: now,
       changeFrequency: "monthly" as const,
-      priority: p === "" ? 1 : 0.9,
+      priority: p === "" ? 1 : p === "/about" ? 0.5 : 0.9,
     })
   );
+  const policy = ["/privacy-policy", "/terms"].map((p) => ({
+    url: `${SITE}${p}`,
+    lastModified: now,
+    changeFrequency: "yearly" as const,
+    priority: 0.2,
+  }));
   const programmatic = AMOUNTS.map((a) => ({
     url: `${SITE}/mortgage/${a}-mortgage-payment`,
     lastModified: now,
     changeFrequency: "monthly" as const,
     priority: 0.7,
   }));
-  return [...core, ...programmatic];
+  return [...core, ...programmatic, ...policy];
 }

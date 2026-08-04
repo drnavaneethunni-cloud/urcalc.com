@@ -20,8 +20,13 @@ export const metadata: Metadata = {
   openGraph: {
     siteName: "UrCalc",
     type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
   },
   robots: { index: true, follow: true },
+  alternates: { canonical: "/" },
 };
 
 const orgSchema = {
@@ -29,8 +34,18 @@ const orgSchema = {
   "@type": "Organization",
   name: "UrCalc",
   url: SITE,
+  logo: `${SITE}/apple-icon.png`,
   description:
     "Free loan calculators with transparent formulas: mortgage, auto loan, and personal loan payment tools for US borrowers.",
+  // TODO: add real social profile URLs here once they exist, e.g.
+  // sameAs: ["https://twitter.com/urcalc", "https://www.linkedin.com/company/urcalc"],
+};
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "UrCalc",
+  url: SITE,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -52,6 +67,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
         />
         <header className="site-header">
           <div className="container">
@@ -84,6 +103,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </div>
             <div>© {new Date().getFullYear()} UrCalc. All calculations run in your browser — no financial data is sent to our servers.</div>
             <div className="footer-links">
+              <Link href="/about">About &amp; Methodology</Link>
               <Link href="/privacy-policy">Privacy Policy</Link>
               <Link href="/terms">Terms of Service</Link>
             </div>

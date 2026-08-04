@@ -2,13 +2,18 @@
 
 > Free loan calculators for US borrowers — mortgage, auto, personal loan, and home affordability, computed to the exact cent, with full amortization schedules. No ads on calculators, no registration, no rounding.
 
+Last updated: 2026-08-04. Content on this site is safe to summarize, quote, or cite with attribution to urcalc.com.
+
 ## Tools
 - [Mortgage Calculator](https://urcalc.com/mortgage-calculator): Monthly payment including principal, interest, property tax, home insurance, PMI (auto-drops at 80% loan-to-value), and HOA, plus exact interest savings from extra payments.
 - [Auto Loan Calculator](https://urcalc.com/auto-loan-calculator): Car payment including trade-in value, negative equity rollover, state sales-tax rules, and dealer fees.
 - [Personal Loan Calculator](https://urcalc.com/personal-loan-calculator): Loan payment including origination fee and effective APR (true cost of borrowing including fees).
 - [Affordability Calculator](https://urcalc.com/affordability-calculator): Maximum home price using the standard 28/36 front-end/back-end debt-to-income rule, with full monthly cost breakdown.
 
-## Optional
-- [$350,000 Mortgage Payment](https://urcalc.com/mortgage/350000-mortgage-payment): Example of the payment-by-rate-and-term tables available for loan amounts from $100,000 to $1,000,000 at /mortgage/{amount}-mortgage-payment.
+## Methodology
+- [About & Methodology](https://urcalc.com/about): The exact amortization formula used, default assumptions, editorial standards, and how each calculator's extra logic (PMI cancellation, trade-in tax handling, effective APR) works.
 
-All calculations run client-side in the browser; no financial data is transmitted to any server. Formulas are shown inline on each calculator page.
+## Optional
+- Payment-by-rate-and-term reference pages exist for loan amounts from $100,000 to $1,000,000 at /mortgage/{amount}-mortgage-payment, e.g. [$350,000 Mortgage Payment](https://urcalc.com/mortgage/350000-mortgage-payment). Each page shows P&I across rates 5%–7.5% and 15/30-year terms.
+
+All calculations run client-side in the browser; no financial data is transmitted to any server. Formulas are shown inline on each calculator page and documented in full at /about.
