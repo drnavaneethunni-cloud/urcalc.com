@@ -236,7 +236,7 @@ export default function RentVsBuyCalc({ preset }: { preset?: RentVsBuyPreset }) 
           <div className="panel">
             <div className="headline-figure">
               <div className="label">What the money says</div>
-              <div className="value num" style={{ fontSize: "clamp(24px, 3.6vw, 34px)" }} aria-live="polite">
+              <div className="value num" style={{ fontSize: "clamp(26px, 3.8vw, 36px)" }} aria-live="polite">
                 {headlineText}
               </div>
             </div>
@@ -358,7 +358,7 @@ function SummaryStrip({
   return (
     <div className="panel summary-strip" style={{ marginTop: 24 }}>
       <div className="eyebrow">Your combined verdict</div>
-      <div style={{ fontSize: 18, fontWeight: 700, letterSpacing: "-0.02em" }}>{text}</div>
+      <div style={{ fontSize: 19, fontWeight: 700, letterSpacing: "-0.02em" }}>{text}</div>
       <p className="note" style={{ marginTop: 6 }}>
         Based on {yearsStaying} years and the preferences you&apos;ve set below. Money alone says{" "}
         {res.headline === "even" ? "it's about even" : res.headline}.
@@ -474,7 +474,7 @@ function NetWorthChart({
         {ticks.map((t) => {
           const idx = Math.round(t * (n - 1));
           return (
-            <text key={t} x={x(idx)} y={H - 8} fontSize="11" fill="var(--ink-faint)" textAnchor={t === 0 ? "start" : t === 1 ? "end" : "middle"}>
+            <text key={t} x={x(idx)} y={H - 8} fontSize="12" fill="var(--ink-faint)" textAnchor={t === 0 ? "start" : t === 1 ? "end" : "middle"}>
               Yr {rows[idx].year}
             </text>
           );
