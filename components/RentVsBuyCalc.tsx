@@ -161,14 +161,9 @@ export default function RentVsBuyCalc({ preset }: { preset?: RentVsBuyPreset }) 
           <div className="eyebrow">Step 2</div>
           <h2 style={{ marginTop: 0 }}>What matters to you</h2>
           <p className="lede">
-            Money isn&apos;t the only thing that matters. Below, say how much each thing matters to
-            you and which way it leans — rent or buy. We&apos;ll blend your answers with the dollar
-            numbers on the other side into one clear answer.
-          </p>
-          <p className="note" style={{ marginTop: -12, marginBottom: 20 }}>
-            Under the hood this uses a simplified version of a scoring method called the Analytic
-            Hierarchy Process — a handful of quick questions instead of a long one, in exchange for
-            skipping its usual consistency check.
+            Five simple questions about what matters to you in life — not about renting or buying.
+            We&apos;ll work out on our own which way each answer points, and blend that with the
+            numbers on the other side into one answer.
           </p>
 
           <div className="panel">
@@ -177,25 +172,26 @@ export default function RentVsBuyCalc({ preset }: { preset?: RentVsBuyPreset }) 
               return (
                 <div className="ahp-factor" key={factor.key}>
                   <h3>{factor.label}</h3>
-                  <p className="note" style={{ marginTop: 0, marginBottom: 14 }}>{factor.description}</p>
+                  <p className="ahp-question">{factor.question}</p>
+                  <p className="ahp-examples">{factor.examples.join(" · ")}</p>
                   <DiscreteSlider
-                    label="How much does this matter to you?"
+                    label="How important is this compared with money?"
                     min={WEIGHT_STEP_MIN}
                     max={WEIGHT_STEP_MAX}
                     value={state.weightStep}
                     onChange={(v) => updateFactor(factor.key, "weightStep", v)}
-                    leftLabel="Money matters far more"
-                    rightLabel="This matters far more"
+                    leftLabel="Money matters much more"
+                    rightLabel="This matters much more"
                     wording={weightStepWording(state.weightStep)}
                   />
                   <DiscreteSlider
-                    label="Which way does it lean?"
+                    label="Which option better satisfies this need?"
                     min={WEIGHT_STEP_MIN}
                     max={WEIGHT_STEP_MAX}
                     value={state.directionStep}
                     onChange={(v) => updateFactor(factor.key, "directionStep", v)}
-                    leftLabel="Points to renting"
-                    rightLabel="Points to buying"
+                    leftLabel="Renting"
+                    rightLabel="Buying"
                     wording={directionStepWording(state.directionStep)}
                   />
                 </div>
@@ -204,7 +200,7 @@ export default function RentVsBuyCalc({ preset }: { preset?: RentVsBuyPreset }) 
           </div>
 
           <div className="panel" style={{ marginTop: 20 }}>
-            <h3 style={{ marginTop: 0 }}>How much each one matters</h3>
+            <h3 style={{ marginTop: 0 }}>Your priorities, ranked</h3>
             <WeightBars weights={ahp.weights} />
           </div>
 
@@ -373,15 +369,15 @@ function SummaryStrip({
     ahp.state === "close"
       ? `Too close to call — ${fmtPct(ahp.buyScore * 100, 0)} buy vs ${fmtPct(ahp.rentScore * 100, 0)} rent.`
       : combined === "even"
-      ? "About even, once your preferences are weighed in."
+      ? "About even, once your priorities are weighed in."
       : `Combined verdict: ${combined} comes out ahead, weighing the money and what matters to you.`;
   return (
     <div className="panel summary-strip" style={{ marginTop: 24 }}>
       <div className="eyebrow">Your combined verdict</div>
       <div style={{ fontSize: 20, fontWeight: 700, letterSpacing: "-0.02em" }}>{text}</div>
       <p className="note" style={{ marginTop: 6 }}>
-        Based on {yearsStaying} years and the preferences you&apos;ve set below. Money alone says{" "}
-        {res.headline === "even" ? "it's about even" : res.headline}.
+        Based on {yearsStaying} years and the life priorities you&apos;ve set below. Money alone
+        says {res.headline === "even" ? "it's about even" : res.headline}.
       </p>
     </div>
   );
@@ -392,10 +388,11 @@ function SummaryStrip({
 // (per the design tokens) rather than a mismatched rainbow.
 const WEIGHT_BAR_COLORS: Record<string, string> = {
   money: "var(--ink)",
-  freedom: "var(--seg-2)",
-  staying: "var(--seg-3)",
-  control: "var(--accent)",
-  upkeep: "var(--interest)",
+  security: "var(--seg-2)",
+  freedom: "var(--seg-3)",
+  achievement: "var(--accent)",
+  financialComfort: "var(--interest)",
+  convenience: "var(--seg-4)",
 };
 
 function WeightBars({ weights }: { weights: { key: string; label: string; weight: number }[] }) {
@@ -433,9 +430,10 @@ function VerdictCallout({
   if (ahp.state === "close") {
     return (
       <div className="verdict verdict-close">
-        <strong>Too close to call.</strong> The combined score is {fmtPct(ahp.buyScore * 100, 0)} buy vs{" "}
-        {fmtPct(ahp.rentScore * 100, 0)} rent — within a coin flip. Both choices are reasonable here;
-        decide on something this model doesn&apos;t capture, like how long you actually expect to stay.
+        <strong>Too close to call.</strong> You&apos;re at {fmtPct(ahp.buyScore * 100, 0)} buy vs{" "}
+        {fmtPct(ahp.rentScore * 100, 0)} rent — basically a coin flip. Both choices are reasonable
+        here; decide on something this model can&apos;t weigh for you, like how long you actually
+        expect to stay.
       </div>
     );
   }
@@ -443,19 +441,19 @@ function VerdictCallout({
   if (ahp.state === "flip" && ahp.topFactor) {
     return (
       <div className="verdict verdict-flip">
-        <strong>Your preferences flip the financial answer.</strong> {ahp.topFactor.label} carries{" "}
-        {fmtPct(ahp.topFactor.weight * 100, 0)} of your combined weight — enough to move the verdict
-        to {combined}. Financially the gap favors{" "}
-        {res.headline === "even" ? "neither side" : res.headline}; weighing it against your
-        preferences, you&apos;re effectively paying about {fmtC(monthlyGap * 100)}/month for that.
+        <strong>What matters to you changes the answer.</strong> {ahp.topFactor.label} matters most
+        to you, worth {fmtPct(ahp.topFactor.weight * 100, 0)} of your answer — enough to move the
+        verdict to {combined}. Financially the gap favors{" "}
+        {res.headline === "even" ? "neither side" : res.headline}; weighing it against your life
+        priorities, you&apos;re effectively paying about {fmtC(monthlyGap * 100)}/month for that.
       </div>
     );
   }
 
   return (
     <div className="verdict verdict-confirm">
-      <strong>Your preferences confirm the financial answer.</strong> The combined score favors{" "}
-      {combined} by about {margin} points, consistent with what the money says on its own.
+      <strong>What matters to you agrees with the money.</strong> Your answer favors{" "}
+      {combined} by about {margin} points, the same direction the dollars point on their own.
     </div>
   );
 }

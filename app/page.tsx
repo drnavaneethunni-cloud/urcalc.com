@@ -76,7 +76,7 @@ const tools = [
     title: "Rent vs. Buy Calculator",
     tag: "New",
     icon: icons.rentBuy,
-    desc: "The full financial comparison, plus what matters to you — flexibility, stability, and control.",
+    desc: "The full financial comparison, plus five simple questions about what matters to you in life.",
   },
 ];
 

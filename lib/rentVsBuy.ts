@@ -11,12 +11,17 @@
  * capital-gains haircut, so every year in the table is on the same
  * apples-to-apples, after-tax basis.
  *
- * Stage 2 is a reduced Analytic Hierarchy Process: instead of the ~10
- * pairwise judgments a full AHP over 5 factors (money + 4 qualitative
- * factors) would need, we only ask each factor to be compared against money
- * once (a weight) plus a direction lean once. That's 8 judgments instead of
- * 10 — a real trade: no internal consistency check, but a much shorter
- * questionnaire. See AHP_FACTORS and weightToRatio/directionToShare below.
+ * Stage 2 doesn't ask about housing features. It asks about five
+ * fundamental life priorities — security, freedom, achievement, financial
+ * comfort, and convenience — the same ones that quietly drive most housing
+ * decisions anyway, and infers whether each one leans toward renting or
+ * buying. Under the hood it's a reduced Analytic Hierarchy Process: instead
+ * of the ~10 pairwise judgments a full AHP over money + 5 factors would
+ * need, each factor is only compared against money once (how much it
+ * matters) plus a direction lean once (which way it points). That's 10
+ * judgments instead of 15 — a real trade: no internal consistency check,
+ * but a much shorter, much more human questionnaire. See AHP_FACTORS and
+ * weightStepToRatio/directionStepToBuyShare below.
  */
 
 import { amortize, clampNum } from "./finance";
@@ -246,34 +251,48 @@ export function rentVsBuy(raw: RentVsBuyInputs): RentVsBuyResult {
   };
 }
 
-// ─────────────────── Stage 2: reduced AHP preference layer ───────────────────
+// ─────────────── Stage 2: five life priorities, weighed AHP-style ───────────────
+// The user never sees the words "feature," "attribute," or "AHP" — they answer
+// five simple questions about what matters to them in life. Renting and buying
+// are just what each answer quietly points toward.
 
 export interface AhpFactorDef {
-  key: "freedom" | "staying" | "control" | "upkeep";
+  key: "security" | "freedom" | "achievement" | "financialComfort" | "convenience";
   label: string;
-  description: string;
+  question: string;
+  examples: string[];
 }
 
 export const AHP_FACTORS: AhpFactorDef[] = [
   {
+    key: "security",
+    label: "Security",
+    question: "How important is feeling secure about where you live?",
+    examples: ["Stable home", "Children's schooling", "Long-term roots", "Family security", "Peace of mind"],
+  },
+  {
     key: "freedom",
-    label: "Freedom to move",
-    description: "Leaving costs a renter a lease break, an owner a sale.",
+    label: "Freedom",
+    question: "How important is having the freedom to change your plans in life?",
+    examples: ["Career opportunities", "Relocating", "Business", "Travel", "Flexibility"],
   },
   {
-    key: "staying",
-    label: "Staying put",
-    description: "No landlord ending your lease or raising the rent.",
+    key: "achievement",
+    label: "Achievement",
+    question: "How important is owning a home as a personal life goal?",
+    examples: ["Pride", "Sense of accomplishment", "Building something of your own", "Personal milestone", "Identity"],
   },
   {
-    key: "control",
-    label: "Making it yours",
-    description: "Renovating, pets, changes — your call, not a landlord's.",
+    key: "financialComfort",
+    label: "Financial Comfort",
+    question: "Which housing choice gives you greater financial peace of mind?",
+    examples: ["Comfortable monthly payments", "Cash available for emergencies", "Low financial stress", "Long-term confidence", "Investment flexibility"],
   },
   {
-    key: "upkeep",
-    label: "Freedom from upkeep",
-    description: "Who fixes things at 11pm — you, or a call to the landlord.",
+    key: "convenience",
+    label: "Convenience",
+    question: "How important is having fewer day-to-day responsibilities?",
+    examples: ["Maintenance", "Repairs", "Unexpected problems", "Time commitment", "Simplicity"],
   },
 ];
 
@@ -284,36 +303,32 @@ export const WEIGHT_STEP_MAX = 7;
 export const DEFAULT_WEIGHT_STEP = -2;
 export const DEFAULT_DIRECTION_STEP = 0;
 
-const MAGNITUDE_WORDS = [
-  "slightly",
-  "moderately",
-  "somewhat strongly",
-  "strongly",
-  "very strongly",
-  "extremely",
-  "far",
-];
-const DIRECTION_WORDS = [
-  "slightly",
-  "moderately",
-  "somewhat strongly",
-  "strongly",
-  "very strongly",
-  "extremely",
-  "clearly",
-];
-
 /** AHP-style ratio for a weight-vs-money step: magnitude = |step|+1, ratio =
- *  magnitude when the factor outweighs money, 1/magnitude when money wins. */
+ *  magnitude when the factor outweighs money, 1/magnitude when money wins.
+ *  The 15-position step range gives the underlying math fine resolution even
+ *  though the wording shown to the user (below) collapses it to three plain
+ *  buckets — precision under the hood, simplicity on the screen. */
 export function weightStepToRatio(step: number): number {
   const magnitude = Math.abs(step) + 1;
   return step > 0 ? magnitude : 1 / magnitude;
 }
 
+/** Plain-English bucket for how far a step sits from "equal," used by both
+ *  the weight and direction wording below. */
+function magnitudeBucket(step: number): "a little" | "more" | "a lot" {
+  const abs = Math.abs(step);
+  if (abs <= 2) return "a little";
+  if (abs <= 5) return "more";
+  return "a lot";
+}
+
 export function weightStepWording(step: number): string {
-  if (step === 0) return "money and this factor matter equally";
-  const w = MAGNITUDE_WORDS[Math.min(Math.abs(step), 7) - 1];
-  return step > 0 ? `${w} more important than the money` : `the money matters ${w} more than this`;
+  if (step === 0) return "Equally important as money";
+  const bucket = magnitudeBucket(step);
+  if (step > 0) {
+    return bucket === "a little" ? "A little more important than money" : bucket === "more" ? "More important than money" : "Much more important than money";
+  }
+  return bucket === "a little" ? "Money matters a little more" : bucket === "more" ? "Money matters more" : "Money matters much more";
 }
 
 /** 0..1 "buy share" for a direction step: 0.5 = neutral, scaling to 0/1 at the extremes. */
@@ -322,9 +337,10 @@ export function directionStepToBuyShare(step: number): number {
 }
 
 export function directionStepWording(step: number): string {
-  if (step === 0) return "neutral — no lean either way";
-  const w = DIRECTION_WORDS[Math.min(Math.abs(step), 7) - 1];
-  return step > 0 ? `${w} favors buying` : `${w} favors renting`;
+  if (step === 0) return "Neutral";
+  const bucket = magnitudeBucket(step);
+  const lean = bucket === "a little" ? "Leans slightly" : bucket === "more" ? "Leans" : "Strongly favors";
+  return step > 0 ? `${lean} toward buying` : `${lean} toward renting`;
 }
 
 export interface AhpFactorState {

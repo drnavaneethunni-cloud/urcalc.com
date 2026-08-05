@@ -196,8 +196,8 @@ export default function Page() {
       <p>
         If you're somewhere between those two lists — which is most people — that's exactly what
         the <Link href="/rent-vs-buy-calculator">rent vs. buy calculator</Link> is for: run your
-        real numbers for the financial side, then weigh flexibility, stability, control, and
-        upkeep against the result instead of guessing at how much they matter.
+        real numbers for the financial side, then answer five simple questions about what matters
+        to you in life instead of guessing at how much they matter.
       </p>
 
       <AdUnit slot="0000000003" />

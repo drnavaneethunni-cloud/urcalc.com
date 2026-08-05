@@ -6,12 +6,12 @@ import { JsonLd, calculatorSchema, breadcrumbSchema, Faq, Disclaimer } from "@/c
 export const metadata: Metadata = {
   title: "Rent vs. Buy Calculator — The Money, and What Matters to You",
   description:
-    "See whether renting or buying leaves you ahead financially — full amortization, taxes, and opportunity cost — then weigh it against flexibility, stability, and control with a short preference questionnaire.",
+    "See whether renting or buying leaves you ahead financially — full amortization, taxes, and opportunity cost — then weigh it against what matters most to you in life with five simple questions.",
   alternates: { canonical: "/rent-vs-buy-calculator" },
   openGraph: {
     title: "Rent vs. Buy Calculator",
     description:
-      "The complete financial comparison, plus a short questionnaire that weighs what money can't capture.",
+      "The complete financial comparison, plus five simple questions about what matters to you in life.",
   },
 };
 
@@ -34,7 +34,7 @@ const faqs = [
   },
   {
     q: "What does Stage 2 add that the financial model doesn't?",
-    a: "Money is only part of the decision. Stage 2 asks how much four qualitative factors — flexibility, stability, control over your space, and freedom from upkeep — matter to you relative to the dollar gap, and which way each one leans. It's a simplified version of a technique called the Analytic Hierarchy Process, and it produces a combined score that can confirm, narrow, or outright flip the financial verdict, depending on how strongly you weight each factor.",
+    a: "Money is only part of the decision. Stage 2 asks five simple questions about what matters to you in life — security, freedom, achievement, financial comfort, and convenience — not about renting or buying at all. It works out on its own which way each answer points, and produces a combined score that can confirm, narrow, or outright flip the financial verdict, depending on how much each thing matters to you.",
   },
 ];
 
@@ -84,17 +84,17 @@ export default function Page() {
           common later in a loan's life as the interest portion of each payment shrinks.
         </p>
         <p>
-          Stage 2 doesn't try to out-argue the math. It takes four things the dollar figure can't
-          capture — freedom to move, staying put, making a place yours, and freedom from upkeep —
-          and asks two quick questions about each: how much it matters relative to money, and which
-          way it leans. Those answers combine into weights (using the same logic behind a technique
-          called the Analytic Hierarchy Process) and blend with the financial gap into a single
-          buy-or-rent score.
+          Stage 2 doesn&apos;t ask you a single thing about renting or buying. It asks what matters
+          to you in life — security, freedom, achievement, financial comfort, and convenience — the
+          same priorities that quietly drive most housing decisions anyway. For each one you say how
+          much it matters to you next to money, and which choice better satisfies it. The calculator
+          works out on its own which way each answer points, and blends those answers with the
+          financial gap into a single buy-or-rent score.
         </p>
         <p>
           The two stages are deliberately kept equal in weight on the page. A calculator that only
           shows the financial answer quietly assumes money is the only thing that matters to you;
-          one that only asks about preferences ignores a number that's often tens of thousands of
+          one that only asks about your life ignores a number that&apos;s often tens of thousands of
           dollars. Seeing both, side by side, is the point.
         </p>
       </section>

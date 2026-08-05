@@ -77,9 +77,12 @@ export default function AboutPage() {
         <strong>Rent vs. buy:</strong> a month-by-month simulation where whoever pays less for
         housing invests the difference, the renter starts with the buyer's down payment and
         closing costs already invested, and both sides pay capital gains tax on invested growth
-        at the end. A second, optional layer weighs non-financial factors — flexibility,
-        stability, control, and upkeep — against the dollar result using a simplified version of
-        the Analytic Hierarchy Process.
+        at the end. A second layer asks five simple questions about life priorities — security,
+        freedom, achievement, financial comfort, and convenience — rather than anything about
+        housing directly, and infers which way each answer points before weighing it against the
+        dollar result. Technically this is a simplified version of a scoring method called the
+        Analytic Hierarchy Process; practically, it's meant to feel like five ordinary questions,
+        not a survey.
       </p>
 
       <h2>Default assumptions</h2>

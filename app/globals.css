@@ -386,22 +386,27 @@ table.rates .current-tag {
 }
 
 
-/* ── Rent vs. Buy: discrete sliders ── */
-.slider-field { margin-bottom: 20px; }
+/* ── Rent vs. Buy: discrete sliders ──
+   Sized for comfortable use without precision pointing: a thicker track,
+   larger tap target, and a bigger live-value readout, since this section is
+   explicitly designed to be usable by people who don't want to squint or
+   aim carefully. */
+.slider-field { margin-bottom: 28px; }
+.slider-field label { font-size: 16.5px; }
 .slider {
-  -webkit-appearance: none; appearance: none; width: 100%; height: 4px;
-  border-radius: 2px; background: var(--line-strong); accent-color: var(--ink);
-  margin: 10px 0 6px;
+  -webkit-appearance: none; appearance: none; width: 100%; height: 8px;
+  border-radius: 4px; background: var(--line-strong); accent-color: var(--ink);
+  margin: 14px 0 8px; cursor: pointer;
 }
 .slider:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .slider-scale {
-  display: flex; justify-content: space-between; font-size: 14px;
-  color: var(--ink-faint); line-height: 1.3;
+  display: flex; justify-content: space-between; font-size: 14.5px;
+  color: var(--ink-faint); line-height: 1.35;
 }
-.slider-scale span { max-width: 42%; }
+.slider-scale span { max-width: 44%; }
 .slider-scale span:last-child { text-align: right; }
 .slider-value {
-  margin-top: 6px; font-size: 16px; font-weight: 600; color: var(--accent-ink);
+  margin-top: 8px; font-size: 18px; font-weight: 700; color: var(--accent-ink);
   text-align: center;
 }
 
@@ -431,11 +436,23 @@ table.rates .current-tag {
   .rvb-col-money { padding-left: 0; }
 }
 
-/* ── AHP factor blocks ── */
-.ahp-factor { padding: 20px 0; border-bottom: 1px solid var(--line); }
+/* ── Life-priority question blocks (Stage 2) ──
+   Each one reads like a single simple question, not a survey row: a short
+   bold label, a real question at a size you don't have to lean in for, a
+   muted line of examples for context, then the two sliders. Generous
+   vertical rhythm throughout — this section is deliberately the most
+   spacious on the page. */
+.ahp-factor { padding: 32px 0; border-bottom: 1px solid var(--line); }
 .ahp-factor:last-child { border-bottom: none; padding-bottom: 4px; }
 .ahp-factor:first-child { padding-top: 0; }
-.ahp-factor h3 { margin: 0 0 4px; }
+.ahp-factor h3 { margin: 0 0 8px; font-size: 20.5px; }
+.ahp-question {
+  margin: 0 0 10px; font-size: 19.5px; font-weight: 600; color: var(--ink);
+  line-height: 1.45; max-width: 46ch;
+}
+.ahp-examples {
+  margin: 0 0 24px; font-size: 15px; color: var(--ink-faint); line-height: 1.6;
+}
 
 /* ── Weight breakdown bars ── */
 .weight-bars { display: flex; flex-direction: column; gap: 16px; }

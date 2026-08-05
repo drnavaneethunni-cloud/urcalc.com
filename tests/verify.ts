@@ -140,7 +140,7 @@ eq("AHP direction 0 is neutral", directionStepToBuyShare(0), 0.5, 0.001);
 eq("AHP direction +7 is 1", directionStepToBuyShare(7), 1, 0.001);
 eq("AHP direction -7 is 0", directionStepToBuyShare(-7), 0, 0.001);
 
-// 23. AHP: weights across money + 4 factors always sum to 1.
+// 23. AHP: weights across money + 5 life-priority factors always sum to 1.
 const factorStates = AHP_FACTORS.map((f) => ({ key: f.key, weightStep: -2, directionStep: 0 }));
 const ahp1 = computeAhp(factorStates, 50000, 400000, "buying");
 const weightSum = ahp1.weights.reduce((s, w) => s + w.weight, 0);
