@@ -367,6 +367,17 @@ function SummaryStrip({
   );
 }
 
+// Money anchors the ramp in ink; each factor gets its own tint from the site's
+// existing tonal blue scale, so the breakdown reads as one coherent instrument
+// (per the design tokens) rather than a mismatched rainbow.
+const WEIGHT_BAR_COLORS: Record<string, string> = {
+  money: "var(--ink)",
+  freedom: "var(--seg-2)",
+  staying: "var(--seg-3)",
+  control: "var(--accent)",
+  upkeep: "var(--interest)",
+};
+
 function WeightBars({ weights }: { weights: { key: string; label: string; weight: number }[] }) {
   return (
     <div className="weight-bars">
@@ -374,7 +385,10 @@ function WeightBars({ weights }: { weights: { key: string; label: string; weight
         <div className="weight-bar-row" key={w.key}>
           <span className="weight-bar-label">{w.label}</span>
           <div className="weight-bar-track">
-            <div className="weight-bar-fill" style={{ width: `${w.weight * 100}%` }} />
+            <div
+              className="weight-bar-fill"
+              style={{ width: `${w.weight * 100}%`, background: WEIGHT_BAR_COLORS[w.key] ?? "var(--ink)" }}
+            />
           </div>
           <span className="weight-bar-pct">{fmtPct(w.weight * 100, 0)}</span>
         </div>

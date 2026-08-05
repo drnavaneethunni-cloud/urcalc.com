@@ -424,12 +424,21 @@ table.rates .current-tag {
 .ahp-factor h3 { margin: 0 0 4px; }
 
 /* ── Weight breakdown bars ── */
-.weight-bars { display: flex; flex-direction: column; gap: 12px; }
-.weight-bar-row { display: grid; grid-template-columns: 1fr 3fr auto; gap: 12px; align-items: center; }
-.weight-bar-label { font-size: 13px; color: var(--ink-soft); }
-.weight-bar-track { height: 8px; border-radius: 4px; background: var(--line); overflow: hidden; }
-.weight-bar-fill { height: 100%; background: var(--ink); border-radius: 4px; transition: width 300ms ease; }
-.weight-bar-pct { font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; min-width: 34px; }
+.weight-bars { display: flex; flex-direction: column; gap: 16px; }
+.weight-bar-row { display: grid; grid-template-columns: 1fr 3fr auto; gap: 14px; align-items: center; }
+.weight-bar-label { font-size: 13.5px; font-weight: 600; color: var(--ink); }
+.weight-bar-track {
+  height: 12px; border-radius: 999px; background: var(--paper);
+  border: 1px solid var(--line); overflow: hidden;
+}
+.weight-bar-fill {
+  height: 100%; border-radius: 999px; transition: width 400ms ease;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+.weight-bar-pct {
+  font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums;
+  text-align: right; min-width: 38px; color: var(--ink);
+}
 
 /* ── Verdict callout ── */
 .verdict {

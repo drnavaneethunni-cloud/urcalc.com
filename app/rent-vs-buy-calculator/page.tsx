@@ -53,10 +53,11 @@ export default function Page() {
         <div className="eyebrow">Rent vs. Buy</div>
         <h1>Rent vs. buy calculator</h1>
         <p className="lede">
-          Two questions, answered separately. First, what does the money say — a full financial
-          model with amortization, taxes, and opportunity cost? Second, what matters to you —
+          <strong style={{ color: "var(--ink)" }}>Torn on renting vs. buying?</strong> You're really
+          weighing two separate questions. First, what does the money say — a full financial model
+          with amortization, taxes, and opportunity cost? Second, what matters to you —
           flexibility, stability, control, and upkeep, weighed against that dollar gap? Both are
-          visible below; neither is the whole answer alone.
+          visible below; neither one is the whole answer alone.
         </p>
       </div>
 
