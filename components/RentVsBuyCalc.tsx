@@ -321,7 +321,6 @@ export default function RentVsBuyCalc({ preset }: { preset?: RentVsBuyPreset }) 
                     </>
                   ) : null}
                 </div>
-                <ShareButtons shareUrl={shareUrl} />
               </div>
             </div>
           </div>
@@ -345,6 +344,15 @@ export default function RentVsBuyCalc({ preset }: { preset?: RentVsBuyPreset }) 
           on their investment growth, so every number you see is after-tax.
         </p>
       </section>
+
+      <div className="panel" style={{ marginTop: 20 }}>
+        <div className="eyebrow" style={{ marginBottom: 4 }}>Save this result</div>
+        <p className="note" style={{ marginTop: 0, marginBottom: 4 }}>
+          Your inputs and answers above are already baked into the link below — share it, or print
+          the full page including the chart and table.
+        </p>
+        <ShareButtons shareUrl={shareUrl} />
+      </div>
     </>
   );
 }
