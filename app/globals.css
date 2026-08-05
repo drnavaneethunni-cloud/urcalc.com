@@ -417,11 +417,18 @@ table.rates .current-tag {
 }
 .advanced[open] summary::after { content: "\2013"; }
 
-/* ── Rent vs. buy: two-column split (preferences | money) ── */
-.rvb-columns { display: grid; grid-template-columns: 1fr; gap: 40px; align-items: start; }
+/* ── Rent vs. buy: two-column split (preferences | money) ──
+   Both columns hold a comparable amount of content (a control panel plus a
+   couple of result panels each) — the chart, year table, and methodology
+   note live outside this grid, full-width, since they're too wide/long to
+   share a half column gracefully. align-items: stretch keeps the divider
+   between columns running the full height of the taller side instead of
+   trailing off partway down. */
+.rvb-columns { display: grid; grid-template-columns: 1fr; gap: 40px; align-items: stretch; }
 @media (min-width: 1000px) {
-  .rvb-columns { grid-template-columns: 1fr 1fr; }
-  .rvb-col-weights { border-right: 1px solid var(--line); padding-right: 40px; }
+  .rvb-columns { grid-template-columns: 1fr 1fr; gap: 48px; }
+  .rvb-col-weights { border-right: 1px solid var(--line); padding-right: 48px; }
+  .rvb-col-money { padding-left: 0; }
 }
 
 /* ── AHP factor blocks ── */

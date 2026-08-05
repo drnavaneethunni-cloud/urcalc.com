@@ -325,23 +325,26 @@ export default function RentVsBuyCalc({ preset }: { preset?: RentVsBuyPreset }) 
               </div>
             </div>
           </div>
-
-          <NetWorthChart rows={res.rows} breakEvenYear={res.breakEvenYear} />
-          <YearTable rows={res.rows} breakEvenYear={res.breakEvenYear} />
-
-          <section className="prose">
-            <h3>How this is calculated</h3>
-            <p>
-              Every month, whoever pays less for housing invests the gap at your assumed return;
-              the renter starts with the buyer&apos;s down payment and closing costs already
-              invested, since that cash never left their pocket. Property tax and maintenance track
-              the home&apos;s rising value; rent, insurance, and HOA grow on their own schedules. At
-              the end of the holding period the buyer sells (net of selling costs) and both sides
-              pay tax on their investment growth, so every number you see is after-tax.
-            </p>
-          </section>
         </div>
       </div>
+
+      {/* Full-width detail: the chart, year-by-year table, and methodology note
+          don't fit a cramped half-width column, so they run the full container
+          width below the two-column control panels above. */}
+      <NetWorthChart rows={res.rows} breakEvenYear={res.breakEvenYear} />
+      <YearTable rows={res.rows} breakEvenYear={res.breakEvenYear} />
+
+      <section className="prose">
+        <h3>How this is calculated</h3>
+        <p>
+          Every month, whoever pays less for housing invests the gap at your assumed return; the
+          renter starts with the buyer&apos;s down payment and closing costs already invested,
+          since that cash never left their pocket. Property tax and maintenance track the
+          home&apos;s rising value; rent, insurance, and HOA grow on their own schedules. At the
+          end of the holding period the buyer sells (net of selling costs) and both sides pay tax
+          on their investment growth, so every number you see is after-tax.
+        </p>
+      </section>
     </>
   );
 }
