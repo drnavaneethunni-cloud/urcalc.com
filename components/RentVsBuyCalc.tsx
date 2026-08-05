@@ -155,183 +155,192 @@ export default function RentVsBuyCalc({ preset }: { preset?: RentVsBuyPreset }) 
     <>
       {hasInteracted ? <SummaryStrip res={res} ahp={ahp} yearsStaying={yearsStaying} /> : null}
 
-      {/* ─────────────────────── Stage 1 ─────────────────────── */}
-      <div className="eyebrow" style={{ marginTop: 32 }}>Stage 1 · The math</div>
-      <h2 style={{ marginTop: 0 }}>What the money says</h2>
-      <p className="lede">
-        A month-by-month simulation: whoever pays less for housing invests the difference, and
-        the renter starts with the buyer&apos;s down payment and closing costs already invested.
-        Both households spend the same amount on everything else.
-      </p>
+      <div className="rvb-columns" style={{ marginTop: 32 }}>
+        {/* ─────────────────────── Step 2: what matters to you ─────────────────────── */}
+        <div className="rvb-col rvb-col-weights">
+          <div className="eyebrow">Step 2</div>
+          <h2 style={{ marginTop: 0 }}>What matters to you</h2>
+          <p className="lede">
+            Money isn&apos;t the only thing that matters. Below, say how much each thing matters to
+            you and which way it leans — rent or buy. We&apos;ll blend your answers with the dollar
+            numbers on the other side into one clear answer.
+          </p>
+          <p className="note" style={{ marginTop: -12, marginBottom: 20 }}>
+            Under the hood this uses a simplified version of a scoring method called the Analytic
+            Hierarchy Process — a handful of quick questions instead of a long one, in exchange for
+            skipping its usual consistency check.
+          </p>
 
-      <div className="calc-grid">
-        <div className="panel">
-          <div className="eyebrow" style={{ marginBottom: 20 }}>The Home</div>
-          <NumField label="Home price" value={homePrice} onChange={setHomePrice} prefix="$" />
-          <NumField label="Down payment" hint="% of home price" value={downPaymentPct} onChange={setDownPaymentPct} suffix="%" step={1} max={100} />
-          <div className="field-row">
-            <NumField label="Mortgage rate" value={mortgageRatePct} onChange={setMortgageRatePct} suffix="%" step={0.05} max={30} />
-            <ToggleGroup
-              label="Loan term"
-              value={loanTermYears}
-              onChange={setLoanTermYears}
-              options={[
-                { value: 15, label: "15 yr" },
-                { value: 20, label: "20 yr" },
-                { value: 30, label: "30 yr" },
+          <div className="panel">
+            {AHP_FACTORS.map((factor, i) => {
+              const state = factors[i];
+              return (
+                <div className="ahp-factor" key={factor.key}>
+                  <h3>{factor.label}</h3>
+                  <p className="note" style={{ marginTop: 0, marginBottom: 14 }}>{factor.description}</p>
+                  <DiscreteSlider
+                    label="How much does this matter to you?"
+                    min={WEIGHT_STEP_MIN}
+                    max={WEIGHT_STEP_MAX}
+                    value={state.weightStep}
+                    onChange={(v) => updateFactor(factor.key, "weightStep", v)}
+                    leftLabel="Money matters far more"
+                    rightLabel="This matters far more"
+                    wording={weightStepWording(state.weightStep)}
+                  />
+                  <DiscreteSlider
+                    label="Which way does it lean?"
+                    min={WEIGHT_STEP_MIN}
+                    max={WEIGHT_STEP_MAX}
+                    value={state.directionStep}
+                    onChange={(v) => updateFactor(factor.key, "directionStep", v)}
+                    leftLabel="Points to renting"
+                    rightLabel="Points to buying"
+                    wording={directionStepWording(state.directionStep)}
+                  />
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="panel" style={{ marginTop: 20 }}>
+            <h3 style={{ marginTop: 0 }}>How much each one matters</h3>
+            <WeightBars weights={ahp.weights} />
+          </div>
+
+          <div className="panel" style={{ marginTop: 20 }}>
+            <h3 style={{ marginTop: 0 }}>Your answer: rent or buy?</h3>
+            <CompositionBar
+              segments={[
+                { label: "Rent", valueFmt: fmtPct(ahp.rentScore * 100, 0), valueC: Math.round(ahp.rentScore * 1000), color: "var(--seg-3)" },
+                { label: "Buy", valueFmt: fmtPct(ahp.buyScore * 100, 0), valueC: Math.round(ahp.buyScore * 1000), color: "var(--ink)" },
               ]}
             />
-          </div>
-
-          <div className="eyebrow" style={{ margin: "32px 0 20px" }}>The Alternative</div>
-          <NumField label="Monthly rent" hint="equivalent unit today" value={monthlyRent} onChange={setMonthlyRent} prefix="$" />
-          <div className="field-row">
-            <NumField label="Rent growth" value={rentGrowthPct} onChange={setRentGrowthPct} suffix="%/yr" step={0.1} max={20} />
-            <NumField label="Investment return" hint="on invested cash" value={investmentReturnPct} onChange={setInvestmentReturnPct} suffix="%/yr" step={0.1} max={30} />
-          </div>
-          <NumField label="Years staying" hint="the holding period" value={yearsStaying} onChange={setYearsStaying} suffix="yrs" step={1} min={1} max={40} />
-
-          <details className="advanced" style={{ marginTop: 24 }}>
-            <summary>Advanced settings</summary>
-            <div style={{ paddingTop: 16 }}>
-              <div className="eyebrow" style={{ marginBottom: 16 }}>Ongoing Ownership Costs</div>
-              <div className="field-row">
-                <NumField label="Property tax" hint="% of value / yr" value={propertyTaxPct} onChange={setPropertyTaxPct} suffix="%" step={0.05} max={5} />
-                <NumField label="Home insurance" hint="per year" value={homeInsuranceAnnual} onChange={setHomeInsuranceAnnual} prefix="$" />
-              </div>
-              <div className="field-row">
-                <NumField label="HOA" hint="per month" value={hoaMonthly} onChange={setHoaMonthly} prefix="$" />
-                <NumField label="Maintenance" hint="% of value / yr" value={maintenancePct} onChange={setMaintenancePct} suffix="%" step={0.1} max={5} />
-              </div>
-
-              <div className="eyebrow" style={{ margin: "24px 0 16px" }}>Transaction &amp; Market</div>
-              <div className="field-row">
-                <NumField label="Buying closing costs" hint="% of price" value={buyingClosingCostsPct} onChange={setBuyingClosingCostsPct} suffix="%" step={0.5} max={15} />
-                <NumField label="Selling costs" hint="% of sale price" value={sellingCostsPct} onChange={setSellingCostsPct} suffix="%" step={0.5} max={15} />
-              </div>
-              <div className="field-row">
-                <NumField label="Home appreciation" value={appreciationPct} onChange={setAppreciationPct} suffix="%/yr" step={0.1} max={20} />
-                <NumField label="Renter's insurance" hint="per year" value={rentersInsuranceAnnual} onChange={setRentersInsuranceAnnual} prefix="$" />
-              </div>
-              <NumField label="General inflation" hint="HOA, insurance, other costs" value={inflationPct} onChange={setInflationPct} suffix="%/yr" step={0.1} max={20} />
-
-              <div className="eyebrow" style={{ margin: "24px 0 16px" }}>Taxes</div>
-              <label className="check" style={{ marginBottom: 14 }}>
-                <input type="checkbox" checked={applyTaxBenefit} onChange={(e) => setApplyTaxBenefit(e.target.checked)} />
-                <span>Apply the mortgage interest / property tax deduction when itemizing beats the standard deduction</span>
-              </label>
-              <div className="field-row">
-                <NumField label="Marginal tax rate" value={marginalTaxRatePct} onChange={setMarginalTaxRatePct} suffix="%" step={1} max={50} />
-                <NumField label="Capital gains rate" hint="on invested growth" value={capitalGainsRatePct} onChange={setCapitalGainsRatePct} suffix="%" step={1} max={50} />
-              </div>
-              <div className="field-row">
-                <NumField label="Standard deduction" hint="2026, MFJ" value={standardDeduction} onChange={setStandardDeduction} prefix="$" />
-                <NumField label="SALT cap" hint="2026" value={saltCap} onChange={setSaltCap} prefix="$" />
-              </div>
-            </div>
-          </details>
-        </div>
-
-        <div className="calc-results">
-          <div className="panel">
-            <div className="headline-figure">
-              <div className="label">What the money says</div>
-              <div className="value num" style={{ fontSize: "clamp(26px, 3.8vw, 36px)" }} aria-live="polite">
-                {headlineText}
-              </div>
-            </div>
-            <div className="statement">
-              <StatementRow
-                k="Break-even year"
-                v={res.breakEvenYear ? `Year ${res.breakEvenYear}` : "Not within horizon"}
-              />
-              <StatementRow k="Down payment + closing costs" v={fmtC((res.downPaymentDollar + res.buyingClosingCostsDollar) * 100)} />
-              {finalRow ? (
-                <>
-                  <StatementRow k={`Home value, year ${finalRow.year}`} v={fmtC(finalRow.homeValue * 100)} />
-                  <StatementRow k="Equity after selling costs" v={fmtC(finalRow.equityAfterSelling * 100)} />
-                  <StatementRow k="Net worth if buying" v={fmtC(finalRow.netWorthBuying * 100)} />
-                  <StatementRow k="Net worth if renting" v={fmtC(finalRow.netWorthRenting * 100)} total />
-                </>
-              ) : null}
-            </div>
-            <ShareButtons shareUrl={shareUrl} />
+            <VerdictCallout res={res} ahp={ahp} yearsStaying={yearsStaying} />
           </div>
         </div>
-      </div>
 
-      <NetWorthChart rows={res.rows} breakEvenYear={res.breakEvenYear} />
-      <YearTable rows={res.rows} breakEvenYear={res.breakEvenYear} />
+        {/* ─────────────────────── Step 1: what the money says ─────────────────────── */}
+        <div className="rvb-col rvb-col-money">
+          <div className="eyebrow">Step 1</div>
+          <h2 style={{ marginTop: 0 }}>What the money says</h2>
+          <p className="lede">
+            We compare renting and buying the way a bank would: full monthly costs, taxes, and what
+            your money could earn if you invested it instead of spending it on a home. Whoever pays
+            less for housing each month invests the difference.
+          </p>
 
-      <section className="prose">
-        <h3>How this is calculated</h3>
-        <p>
-          Every month, the household with the lower housing cost invests the gap at your assumed
-          return; the renter starts with the buyer&apos;s down payment and closing costs already
-          invested, since that cash never left their pocket. Property tax and maintenance track
-          the home&apos;s appreciating value; rent, insurance, and HOA grow on their own schedules.
-          At the end of the holding period the buyer sells (net of selling costs) and both sides
-          pay capital gains tax on their invested growth, so every number you see is after-tax.
-        </p>
-      </section>
+          <div className="calc-grid">
+            <div className="panel">
+              <div className="eyebrow" style={{ marginBottom: 20 }}>The Home</div>
+              <NumField label="Home price" value={homePrice} onChange={setHomePrice} prefix="$" />
+              <NumField label="Down payment" hint="% of home price" value={downPaymentPct} onChange={setDownPaymentPct} suffix="%" step={1} max={100} />
+              <div className="field-row">
+                <NumField label="Mortgage rate" value={mortgageRatePct} onChange={setMortgageRatePct} suffix="%" step={0.05} max={30} />
+                <ToggleGroup
+                  label="Loan term"
+                  value={loanTermYears}
+                  onChange={setLoanTermYears}
+                  options={[
+                    { value: 15, label: "15 yr" },
+                    { value: 20, label: "20 yr" },
+                    { value: 30, label: "30 yr" },
+                  ]}
+                />
+              </div>
 
-      {/* ─────────────────────── Stage 2 ─────────────────────── */}
-      <div className="eyebrow" style={{ marginTop: 44 }}>Stage 2 · Your preferences</div>
-      <h2 style={{ marginTop: 0 }}>What matters to you</h2>
-      <p className="lede">
-        This compares each factor against money alone — four judgments instead of the roughly ten
-        pairwise comparisons a full pairwise AHP over five factors would need. That&apos;s a
-        deliberate trade: you lose the usual internal-consistency check, you gain a much shorter
-        questionnaire. Move any slider below and your combined verdict will appear at the top of
-        the page.
-      </p>
+              <div className="eyebrow" style={{ margin: "32px 0 20px" }}>The Alternative</div>
+              <NumField label="Monthly rent" hint="equivalent unit today" value={monthlyRent} onChange={setMonthlyRent} prefix="$" />
+              <div className="field-row">
+                <NumField label="Rent growth" value={rentGrowthPct} onChange={setRentGrowthPct} suffix="%/yr" step={0.1} max={20} />
+                <NumField label="Investment return" hint="on invested cash" value={investmentReturnPct} onChange={setInvestmentReturnPct} suffix="%/yr" step={0.1} max={30} />
+              </div>
+              <NumField label="Years staying" hint="the holding period" value={yearsStaying} onChange={setYearsStaying} suffix="yrs" step={1} min={1} max={40} />
 
-      <div className="panel">
-        {AHP_FACTORS.map((factor, i) => {
-          const state = factors[i];
-          return (
-            <div className="ahp-factor" key={factor.key}>
-              <h3>{factor.label}</h3>
-              <p className="note" style={{ marginTop: 0, marginBottom: 14 }}>{factor.description}</p>
-              <DiscreteSlider
-                label="Weight vs. money"
-                min={WEIGHT_STEP_MIN}
-                max={WEIGHT_STEP_MAX}
-                value={state.weightStep}
-                onChange={(v) => updateFactor(factor.key, "weightStep", v)}
-                leftLabel="Money matters far more"
-                rightLabel="This factor matters far more"
-                wording={weightStepWording(state.weightStep)}
-              />
-              <DiscreteSlider
-                label="Direction"
-                min={WEIGHT_STEP_MIN}
-                max={WEIGHT_STEP_MAX}
-                value={state.directionStep}
-                onChange={(v) => updateFactor(factor.key, "directionStep", v)}
-                leftLabel="Clearly favors renting"
-                rightLabel="Clearly favors buying"
-                wording={directionStepWording(state.directionStep)}
-              />
+              <details className="advanced" style={{ marginTop: 24 }}>
+                <summary>Advanced settings</summary>
+                <div style={{ paddingTop: 16 }}>
+                  <div className="eyebrow" style={{ marginBottom: 16 }}>Ongoing Ownership Costs</div>
+                  <div className="field-row">
+                    <NumField label="Property tax" hint="% of value / yr" value={propertyTaxPct} onChange={setPropertyTaxPct} suffix="%" step={0.05} max={5} />
+                    <NumField label="Home insurance" hint="per year" value={homeInsuranceAnnual} onChange={setHomeInsuranceAnnual} prefix="$" />
+                  </div>
+                  <div className="field-row">
+                    <NumField label="HOA" hint="per month" value={hoaMonthly} onChange={setHoaMonthly} prefix="$" />
+                    <NumField label="Maintenance" hint="% of value / yr" value={maintenancePct} onChange={setMaintenancePct} suffix="%" step={0.1} max={5} />
+                  </div>
+
+                  <div className="eyebrow" style={{ margin: "24px 0 16px" }}>Transaction &amp; Market</div>
+                  <div className="field-row">
+                    <NumField label="Buying closing costs" hint="% of price" value={buyingClosingCostsPct} onChange={setBuyingClosingCostsPct} suffix="%" step={0.5} max={15} />
+                    <NumField label="Selling costs" hint="% of sale price" value={sellingCostsPct} onChange={setSellingCostsPct} suffix="%" step={0.5} max={15} />
+                  </div>
+                  <div className="field-row">
+                    <NumField label="Home appreciation" value={appreciationPct} onChange={setAppreciationPct} suffix="%/yr" step={0.1} max={20} />
+                    <NumField label="Renter's insurance" hint="per year" value={rentersInsuranceAnnual} onChange={setRentersInsuranceAnnual} prefix="$" />
+                  </div>
+                  <NumField label="General inflation" hint="HOA, insurance, other costs" value={inflationPct} onChange={setInflationPct} suffix="%/yr" step={0.1} max={20} />
+
+                  <div className="eyebrow" style={{ margin: "24px 0 16px" }}>Taxes</div>
+                  <label className="check" style={{ marginBottom: 14 }}>
+                    <input type="checkbox" checked={applyTaxBenefit} onChange={(e) => setApplyTaxBenefit(e.target.checked)} />
+                    <span>Apply the mortgage interest / property tax deduction when itemizing beats the standard deduction</span>
+                  </label>
+                  <div className="field-row">
+                    <NumField label="Marginal tax rate" value={marginalTaxRatePct} onChange={setMarginalTaxRatePct} suffix="%" step={1} max={50} />
+                    <NumField label="Capital gains rate" hint="on invested growth" value={capitalGainsRatePct} onChange={setCapitalGainsRatePct} suffix="%" step={1} max={50} />
+                  </div>
+                  <div className="field-row">
+                    <NumField label="Standard deduction" hint="2026, MFJ" value={standardDeduction} onChange={setStandardDeduction} prefix="$" />
+                    <NumField label="SALT cap" hint="2026" value={saltCap} onChange={setSaltCap} prefix="$" />
+                  </div>
+                </div>
+              </details>
             </div>
-          );
-        })}
-      </div>
 
-      <div className="panel" style={{ marginTop: 20 }}>
-        <h3 style={{ marginTop: 0 }}>Weight breakdown</h3>
-        <WeightBars weights={ahp.weights} />
-      </div>
+            <div className="calc-results">
+              <div className="panel">
+                <div className="headline-figure">
+                  <div className="label">What the money says</div>
+                  <div className="value num" style={{ fontSize: "clamp(28px, 4vw, 39px)" }} aria-live="polite">
+                    {headlineText}
+                  </div>
+                </div>
+                <div className="statement">
+                  <StatementRow
+                    k="Break-even year"
+                    v={res.breakEvenYear ? `Year ${res.breakEvenYear}` : "Not within horizon"}
+                  />
+                  <StatementRow k="Down payment + closing costs" v={fmtC((res.downPaymentDollar + res.buyingClosingCostsDollar) * 100)} />
+                  {finalRow ? (
+                    <>
+                      <StatementRow k={`Home value, year ${finalRow.year}`} v={fmtC(finalRow.homeValue * 100)} />
+                      <StatementRow k="Equity after selling costs" v={fmtC(finalRow.equityAfterSelling * 100)} />
+                      <StatementRow k="Net worth if buying" v={fmtC(finalRow.netWorthBuying * 100)} />
+                      <StatementRow k="Net worth if renting" v={fmtC(finalRow.netWorthRenting * 100)} total />
+                    </>
+                  ) : null}
+                </div>
+                <ShareButtons shareUrl={shareUrl} />
+              </div>
+            </div>
+          </div>
 
-      <div className="panel" style={{ marginTop: 20 }}>
-        <h3 style={{ marginTop: 0 }}>Combined score</h3>
-        <CompositionBar
-          segments={[
-            { label: "Rent", valueFmt: fmtPct(ahp.rentScore * 100, 0), valueC: Math.round(ahp.rentScore * 1000), color: "var(--seg-3)" },
-            { label: "Buy", valueFmt: fmtPct(ahp.buyScore * 100, 0), valueC: Math.round(ahp.buyScore * 1000), color: "var(--ink)" },
-          ]}
-        />
-        <VerdictCallout res={res} ahp={ahp} yearsStaying={yearsStaying} />
+          <NetWorthChart rows={res.rows} breakEvenYear={res.breakEvenYear} />
+          <YearTable rows={res.rows} breakEvenYear={res.breakEvenYear} />
+
+          <section className="prose">
+            <h3>How this is calculated</h3>
+            <p>
+              Every month, whoever pays less for housing invests the gap at your assumed return;
+              the renter starts with the buyer&apos;s down payment and closing costs already
+              invested, since that cash never left their pocket. Property tax and maintenance track
+              the home&apos;s rising value; rent, insurance, and HOA grow on their own schedules. At
+              the end of the holding period the buyer sells (net of selling costs) and both sides
+              pay tax on their investment growth, so every number you see is after-tax.
+            </p>
+          </section>
+        </div>
       </div>
     </>
   );
@@ -358,7 +367,7 @@ function SummaryStrip({
   return (
     <div className="panel summary-strip" style={{ marginTop: 24 }}>
       <div className="eyebrow">Your combined verdict</div>
-      <div style={{ fontSize: 19, fontWeight: 700, letterSpacing: "-0.02em" }}>{text}</div>
+      <div style={{ fontSize: 20, fontWeight: 700, letterSpacing: "-0.02em" }}>{text}</div>
       <p className="note" style={{ marginTop: 6 }}>
         Based on {yearsStaying} years and the preferences you&apos;ve set below. Money alone says{" "}
         {res.headline === "even" ? "it's about even" : res.headline}.
@@ -474,7 +483,7 @@ function NetWorthChart({
         {ticks.map((t) => {
           const idx = Math.round(t * (n - 1));
           return (
-            <text key={t} x={x(idx)} y={H - 8} fontSize="12" fill="var(--ink-faint)" textAnchor={t === 0 ? "start" : t === 1 ? "end" : "middle"}>
+            <text key={t} x={x(idx)} y={H - 8} fontSize="13" fill="var(--ink-faint)" textAnchor={t === 0 ? "start" : t === 1 ? "end" : "middle"}>
               Yr {rows[idx].year}
             </text>
           );

@@ -40,7 +40,7 @@ export function BalanceChart({ schedule, principalC }: { schedule: ScheduleRow[]
         {ticks.map((t) => {
           const m = Math.round(t * (n - 1));
           return (
-            <text key={t} x={x(m)} y={H - 8} fontSize="12" fill="var(--ink-faint)" textAnchor={t === 0 ? "start" : t === 1 ? "end" : "middle"}>
+            <text key={t} x={x(m)} y={H - 8} fontSize="13" fill="var(--ink-faint)" textAnchor={t === 0 ? "start" : t === 1 ? "end" : "middle"}>
               {t === 0 ? "Now" : `Yr ${Math.round(m / 12)}`}
             </text>
           );
