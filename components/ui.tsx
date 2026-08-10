@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback } from "react";
+import { useCurrency } from "./CurrencyProvider";
 
 /** Numeric input that tolerates commas, blanks, and partial typing. */
 export function NumField({
@@ -28,7 +29,8 @@ export function NumField({
 }) {
   const handle = useCallback(
     (raw: string) => {
-      const cleaned = raw.replace(/[,$\s]/g, "");
+      // Removing any non-numeric typical chars
+      const cleaned = raw.replace(/[,$\s€£¥₹C]/g, "");
       if (cleaned === "" || cleaned === "-" || cleaned === ".") {
         onChange(0);
         return;
@@ -127,7 +129,7 @@ export function ToggleGroup({
   );
 }
 
-/** Down payment as synced $ amount + % fields, matching the reference design. */
+/** Down payment as synced currency amount + % fields. */
 export function DualDownPaymentField({
   homePrice,
   downPayment,
@@ -137,6 +139,7 @@ export function DualDownPaymentField({
   downPayment: number;
   onChange: (v: number) => void;
 }) {
+  const { currency } = useCurrency();
   const pct = homePrice > 0 ? (downPayment / homePrice) * 100 : 0;
   return (
     <div className="field">
@@ -145,14 +148,14 @@ export function DualDownPaymentField({
       </label>
       <div className="dual-field">
         <div className="input-wrap">
-          <span className="affix">$</span>
+          <span className="affix">{currency.symbol}</span>
           <input
             type="number"
             aria-label="Down payment amount"
             value={downPayment === 0 ? "" : Math.round(downPayment)}
             placeholder="0"
             onChange={(e) => {
-              const n = Number(e.target.value.replace(/[,$\s]/g, ""));
+              const n = Number(e.target.value.replace(/[,$\s€£¥₹C]/g, ""));
               onChange(Number.isFinite(n) ? Math.min(n, homePrice) : 0);
             }}
           />

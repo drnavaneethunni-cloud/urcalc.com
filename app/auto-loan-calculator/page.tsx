@@ -50,7 +50,38 @@ export default function Page() {
       </div>
 
       <AutoCalc />
-      <Faq items={faqs} />
+      <div className="prose">
+        <h2>The Complete Guide to Auto Loans</h2>
+        <p>
+          Financing a vehicle often involves more variables than most people realize. While the sticker price is the starting point, the true cost of an auto loan depends on your trade-in, negative equity, dealer fees, and sales taxes. 
+        </p>
+        
+        <h3>Understanding the Math</h3>
+        <p>
+          Auto loan payments are calculated using the same amortization formula as a standard mortgage. However, the <em>principal</em> amount you are financing can be tricky to determine.
+        </p>
+        <p>
+          <strong>Amount Financed = Vehicle Price + Fees + Sales Tax - Down Payment - Net Trade-In</strong>
+        </p>
+        <p>
+          Your "Net Trade-In" is the value of your old car minus anything you still owe on it. If you owe more than the car is worth, you have "negative equity."
+        </p>
+
+        <h3>The Danger of Negative Equity</h3>
+        <p>
+          If you trade in a car that is "underwater" (you owe more than it's worth), the difference doesn't just disappear. The dealership will simply add that remaining debt to your new car loan. This means you will be paying interest on the old car's debt at the new loan's interest rate.
+        </p>
+
+        <h3>Sales Tax Variations</h3>
+        <p>
+          Sales tax rules vary by region. In many states and countries, you only pay sales tax on the <em>difference</em> between the new car price and your trade-in value. However, in some jurisdictions (like California in the US), you pay sales tax on the full purchase price regardless of your trade-in.
+        </p>
+
+        <h3>Choosing the Right Loan Term</h3>
+        <p>
+          Dealerships often push 72-month or 84-month loans because they drastically lower the monthly payment. However, cars are depreciating assets. A long loan means you will likely be underwater on the car for years, and you will pay significantly more in total interest. If a 60-month loan payment is too high, it's generally a sign that the car is too expensive for your budget.
+        </p>
+      </div>
 
       <h2>Related calculators</h2>
       <div className="related">

@@ -2,7 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { mortgage } from "@/lib/finance";
-import { fmtC, fmtCents, fmtMonths, fmtPct } from "@/lib/format";
+import { fmtPct, fmtMonths } from "@/lib/format";
+import { useCurrency } from "./CurrencyProvider";
 import { NumField, ToggleGroup, DualDownPaymentField, StatementRow, CompositionBar, ShareButtons } from "@/components/ui";
 import { AmortTable, BalanceChart } from "@/components/amort";
 
@@ -19,6 +20,7 @@ function readParam(sp: URLSearchParams, key: string, fallback: number): number {
 }
 
 export default function MortgageCalc({ preset }: { preset?: MortgagePreset }) {
+  const { currency, fmtC, fmtCents } = useCurrency();
   const [homePrice, setHomePrice] = useState(preset?.homePrice ?? 425000);
   const [downPayment, setDownPayment] = useState(preset?.downPayment ?? 85000);
   const [rate, setRate] = useState(preset?.rate ?? 6.6);
@@ -88,7 +90,7 @@ export default function MortgageCalc({ preset }: { preset?: MortgagePreset }) {
       <div className="calc-grid">
         <div className="panel">
           <div className="eyebrow" style={{ marginBottom: 20 }}>Loan Details</div>
-          <NumField label="Home price" value={homePrice} onChange={setHomePrice} prefix="$" />
+          <NumField label="Home price" value={homePrice} onChange={setHomePrice} prefix={currency.symbol} />
           <DualDownPaymentField
             homePrice={homePrice}
             downPayment={downPayment}
@@ -109,11 +111,11 @@ export default function MortgageCalc({ preset }: { preset?: MortgagePreset }) {
           </div>
           <div className="eyebrow" style={{ margin: "32px 0 20px" }}>Monthly Costs</div>
           <div className="field-row">
-            <NumField label="Property tax" hint="per year" value={taxAnnual} onChange={setTaxAnnual} prefix="$" />
-            <NumField label="Home insurance" hint="per year" value={insAnnual} onChange={setInsAnnual} prefix="$" />
+            <NumField label="Property tax" hint="per year" value={taxAnnual} onChange={setTaxAnnual} prefix={currency.symbol} />
+            <NumField label="Home insurance" hint="per year" value={insAnnual} onChange={setInsAnnual} prefix={currency.symbol} />
           </div>
           <div className="field-row">
-            <NumField label="HOA fees" hint="per month" value={hoa} onChange={setHoa} prefix="$" />
+            <NumField label="HOA fees" hint="per month" value={hoa} onChange={setHoa} prefix={currency.symbol} />
             <NumField
               label="PMI rate"
               hint={downPct >= 20 ? "waived at 20% down" : "if under 20% down"}
@@ -124,7 +126,7 @@ export default function MortgageCalc({ preset }: { preset?: MortgagePreset }) {
               max={5}
             />
           </div>
-          <NumField label="Extra monthly payment" hint="optional" value={extra} onChange={setExtra} prefix="$" />
+          <NumField label="Extra monthly payment" hint="optional" value={extra} onChange={setExtra} prefix={currency.symbol} />
         </div>
 
         <div className="calc-results">

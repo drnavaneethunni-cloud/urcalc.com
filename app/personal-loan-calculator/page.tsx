@@ -50,7 +50,33 @@ export default function Page() {
       </div>
 
       <PersonalCalc />
-      <Faq items={faqs} />
+      <div className="prose">
+        <h2>The Complete Guide to Personal Loans</h2>
+        <p>
+          Personal loans are unsecured loans, meaning they aren't backed by collateral like a house or a car. Because of this, lenders take on more risk, which often translates to higher interest rates compared to auto loans or mortgages. However, they are highly flexible and can be used for debt consolidation, home improvements, or unexpected expenses.
+        </p>
+        
+        <h3>The Hidden Cost: Origination Fees</h3>
+        <p>
+          Many online lenders charge an "origination fee" to process your personal loan. This is usually a percentage of the loan amount, typically ranging from 1% to 10%.
+        </p>
+        <p>
+          The critical thing to understand about origination fees is that they are usually deducted from your loan disbursement. If you borrow $10,000 and the lender charges a 5% origination fee ($500), you will only receive $9,500 in your bank account. However, you will still make payments and accrue interest based on the full $10,000 borrowed.
+        </p>
+
+        <h3>Effective APR: The Metric That Matters</h3>
+        <p>
+          Because of origination fees, looking at just the "interest rate" is misleading. The Annual Percentage Rate (APR) incorporates both the interest rate and the fees to give you the true annualized cost of borrowing.
+        </p>
+        <p>
+          Our calculator computes the <strong>Effective APR</strong> by determining the rate that makes the present value of your payments equal to the cash you actually received (the loan amount minus the fee). This is the only number you should use when comparing loan offers from different lenders. A loan with a lower interest rate but a high fee can be much more expensive than a loan with a slightly higher rate but zero fees.
+        </p>
+
+        <h3>Debt Consolidation Strategies</h3>
+        <p>
+          One of the most common uses for personal loans is consolidating high-interest credit card debt. When considering this, run your numbers through the calculator to ensure the monthly payment is affordable, and most importantly, compare the total interest paid over the life of the personal loan versus keeping the debt on credit cards.
+        </p>
+      </div>
 
       <h2>Related calculators</h2>
       <div className="related">

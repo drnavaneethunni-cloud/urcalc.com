@@ -2,11 +2,13 @@
 
 import { useMemo, useState } from "react";
 import { personalLoan } from "@/lib/finance";
-import { fmtC, fmtCents, fmtMonths, fmtPct } from "@/lib/format";
+import { fmtMonths, fmtPct } from "@/lib/format";
+import { useCurrency } from "./CurrencyProvider";
 import { NumField, SelectField, StatementRow, CompositionBar, ShareButtons } from "@/components/ui";
 import { AmortTable, BalanceChart } from "@/components/amort";
 
 export default function PersonalCalc() {
+  const { currency, fmtC, fmtCents } = useCurrency();
   const [amount, setAmount] = useState(15000);
   const [rate, setRate] = useState(11.5);
   const [term, setTerm] = useState(36);
@@ -37,7 +39,7 @@ export default function PersonalCalc() {
     <>
       <div className="calc-grid">
         <div className="panel">
-          <NumField label="Loan amount" value={amount} onChange={setAmount} prefix="$" />
+          <NumField label="Loan amount" value={amount} onChange={setAmount} prefix={currency.symbol} />
           <div className="field-row">
             <NumField label="Interest rate" value={rate} onChange={setRate} suffix="%" step={0.1} max={30} />
             <SelectField
@@ -56,7 +58,7 @@ export default function PersonalCalc() {
             step={0.5}
             max={12}
           />
-          <NumField label="Extra monthly payment" hint="optional" value={extra} onChange={setExtra} prefix="$" />
+          <NumField label="Extra monthly payment" hint="optional" value={extra} onChange={setExtra} prefix={currency.symbol} />
         </div>
 
         <div className="calc-results">

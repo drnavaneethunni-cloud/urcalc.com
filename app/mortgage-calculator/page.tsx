@@ -64,8 +64,53 @@ export default function Page() {
         ))}
       </div>
 
-      <Faq items={faqs} />
+      <div className="prose">
+        <h2>Complete Guide to Mortgage Calculations</h2>
+        <p>
+          Buying a home is one of the most significant financial decisions you'll ever make. Understanding exactly how your monthly payment is calculated is crucial for budgeting and comparing loan offers. This calculator breaks down the total cost of homeownership, not just the principal and interest.
+        </p>
 
+        <h3>The Mortgage Payment Formula</h3>
+        <p>
+          The core of your mortgage payment is the Principal and Interest (P&I). Lenders use a standard amortization formula to ensure your loan is paid off in exactly the specified number of years (e.g., 15, 20, or 30 years).
+        </p>
+        <p>
+          The formula used is:
+          <strong>M = P × r(1+r)ⁿ / ((1+r)ⁿ − 1)</strong>
+        </p>
+        <ul>
+          <li><strong>M</strong>: Total monthly payment</li>
+          <li><strong>P</strong>: Principal loan amount</li>
+          <li><strong>r</strong>: Monthly interest rate (annual rate divided by 12)</li>
+          <li><strong>n</strong>: Number of payments (months)</li>
+        </ul>
+        <p>
+          This formula guarantees that in the early years of your loan, most of your payment goes toward interest. In the later years, the balance shifts, and you pay off the principal much faster. This is why making extra payments early on is so powerful.
+        </p>
+
+        <h3>Beyond Principal and Interest (PITI)</h3>
+        <p>
+          A realistic housing budget must account for "PITI" – Principal, Interest, Taxes, and Insurance. Our calculator includes:
+        </p>
+        <ul>
+          <li><strong>Property Taxes:</strong> Usually collected by your local government to fund schools, roads, and services. Lenders often collect this monthly in an escrow account.</li>
+          <li><strong>Homeowners Insurance:</strong> Required by lenders to protect the property against hazards like fire or theft.</li>
+          <li><strong>HOA Fees:</strong> Homeowners Association dues for condos or planned communities.</li>
+        </ul>
+
+        <h3>Understanding Mortgage Insurance (PMI / LMI)</h3>
+        <p>
+          If your down payment is less than 20% of the home's purchase price, lenders typically require Mortgage Insurance. In the US, this is called Private Mortgage Insurance (PMI), while other regions may call it Lenders Mortgage Insurance (LMI).
+        </p>
+        <p>
+          This insurance protects the <em>lender</em> if you default on the loan, but you pay the premium. It usually costs between 0.3% and 1.5% of the loan amount annually. Once your loan balance drops to 80% of the home's value, this insurance is typically cancelled, lowering your monthly payment.
+        </p>
+
+        <h3>The Power of Extra Payments</h3>
+        <p>
+          Because of the way amortization works, adding even a small amount to your monthly payment can save you tens of thousands in interest and shave years off your loan. Any extra payment goes straight to the principal, reducing the balance that accrues interest the following month. Try entering $100 in the "Extra monthly payment" field to see the dramatic difference it makes.
+        </p>
+      </div>
       <h2>Related calculators</h2>
       <div className="related">
         <Link href="/auto-loan-calculator">Auto loan calculator</Link>

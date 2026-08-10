@@ -2,11 +2,13 @@
 
 import { useMemo, useState } from "react";
 import { autoLoan } from "@/lib/finance";
-import { fmtC, fmtCents, fmtMonths } from "@/lib/format";
+import { fmtMonths } from "@/lib/format";
+import { useCurrency } from "./CurrencyProvider";
 import { NumField, ToggleGroup, StatementRow, CompositionBar, ShareButtons } from "@/components/ui";
 import { AmortTable, BalanceChart } from "@/components/amort";
 
 export default function AutoCalc() {
+  const { currency, fmtC, fmtCents } = useCurrency();
   const [price, setPrice] = useState(38000);
   const [down, setDown] = useState(4000);
   const [trade, setTrade] = useState(0);
@@ -48,21 +50,21 @@ export default function AutoCalc() {
     <>
       <div className="calc-grid">
         <div className="panel">
-          <NumField label="Vehicle price" value={price} onChange={setPrice} prefix="$" />
+          <NumField label="Vehicle price" value={price} onChange={setPrice} prefix={currency.symbol} />
           <div className="field-row">
-            <NumField label="Down payment" value={down} onChange={setDown} prefix="$" />
-            <NumField label="Trade-in value" value={trade} onChange={setTrade} prefix="$" />
+            <NumField label="Down payment" value={down} onChange={setDown} prefix={currency.symbol} />
+            <NumField label="Trade-in value" value={trade} onChange={setTrade} prefix={currency.symbol} />
           </div>
           <NumField
             label="Still owed on trade-in"
             hint="rolls into the new loan if more than trade-in value"
             value={owed}
             onChange={setOwed}
-            prefix="$"
+            prefix={currency.symbol}
           />
           <div className="field-row">
             <NumField label="Sales tax" value={taxPct} onChange={setTaxPct} suffix="%" step={0.1} max={15} />
-            <NumField label="Title & fees" value={fees} onChange={setFees} prefix="$" />
+            <NumField label="Title & fees" value={fees} onChange={setFees} prefix={currency.symbol} />
           </div>
           <label className="check">
             <input
