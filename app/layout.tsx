@@ -92,10 +92,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 </Link>
                 <nav className="site-nav" aria-label="Main">
                   <Link href="/mortgage-calculator">Mortgage</Link>
-                  <Link href="/auto-loan-calculator">Auto Loan</Link>
-                  <Link href="/personal-loan-calculator">Personal Loan</Link>
-                  <Link href="/affordability-calculator">Affordability</Link>
+                  <Link href="/auto-loan-calculator">Auto</Link>
+                  <Link href="/personal-loan-calculator">Personal</Link>
                   <Link href="/rent-vs-buy-calculator">Rent vs Buy</Link>
+                  <Link href="/compound-interest-calculator">Compound</Link>
+                  <Link href="/roi-calculator">ROI</Link>
+                  <Link href="/bmi-calculator">BMI</Link>
                 </nav>
                 <HeaderActions />
               </div>
