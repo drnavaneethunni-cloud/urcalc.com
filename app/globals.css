@@ -94,7 +94,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   position: sticky; top: 0; z-index: 20;
 }
 .site-header .container {
-  display: flex; align-items: center; height: 64px; gap: 40px;
+  display: flex; align-items: center; height: 64px; gap: 16px;
+}
+@media (min-width: 768px) {
+  .site-header .container { gap: 40px; }
 }
 .brand {
   display: inline-flex; align-items: center; gap: 10px;
@@ -106,8 +109,17 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   background: linear-gradient(135deg, var(--accent), var(--interest));
   display: flex; align-items: center; justify-content: center; flex-shrink: 0;
 }
-.site-nav { display: flex; gap: 24px; font-size: 14px; flex: 1; align-items: center; }
-.site-nav a { color: var(--ink-soft); font-weight: 500; transition: color 0.2s; }
+.site-nav { 
+  display: flex; gap: 16px; font-size: 14px; flex: 1; align-items: center;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.site-nav::-webkit-scrollbar { display: none; }
+@media (min-width: 768px) {
+  .site-nav { gap: 24px; overflow-x: visible; }
+}
+.site-nav a { color: var(--ink-soft); font-weight: 500; transition: color 0.2s; white-space: nowrap; flex-shrink: 0; }
 .site-nav a:hover { color: var(--ink); }
 .site-nav a.active { color: var(--ink); font-weight: 600; }
 
@@ -150,7 +162,10 @@ h3 { font-size: 18px; margin: 24px 0 8px; font-weight: 600; }
 .num { font-variant-numeric: tabular-nums; }
 
 /* ── Hero (homepage) ── */
-.hero { max-width: 700px; margin: 0 auto; padding: 80px 0 60px; text-align: center; }
+.hero { max-width: 700px; margin: 0 auto; padding: 40px 0 30px; text-align: center; }
+@media (min-width: 768px) {
+  .hero { padding: 80px 0 60px; }
+}
 .hero-badge {
   display: inline-flex; align-items: center; height: 28px; padding: 0 16px;
   border: 1px solid var(--line-strong); border-radius: 14px;
