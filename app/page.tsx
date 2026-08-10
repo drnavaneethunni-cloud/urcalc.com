@@ -146,7 +146,7 @@ export default function Home() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <div className="hero-badge">Free · No ads on calculators · No registration</div>
+        <div className="hero-badge">Free · Accurate · No registration</div>
         <h1>Calculate any loan.<br /><span>Understand every payment.</span></h1>
         <p className="lede">
           Precise calculators for mortgages, auto loans, personal loans, and investments. No rounding, no
