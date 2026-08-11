@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { affordability } from "@/lib/finance";
-import { fmtC, fmtCents, fmtPct } from "@/lib/format";
+import { fmtPct } from "@/lib/format";
 import { useCurrency } from "@/components/CurrencyProvider";
 import { NumField, ToggleGroup, StatementRow, CompositionBar, ShareButtons } from "@/components/ui";
 
@@ -12,7 +12,7 @@ function readParam(sp: URLSearchParams, key: string, fallback: number): number {
 }
 
 export default function AffordabilityCalc() {
-  const { currency } = useCurrency();
+  const { currency, fmtC, fmtCents } = useCurrency();
   const [income, setIncome] = useState(95000);
   const [debts, setDebts] = useState(400);
   const [down, setDown] = useState(40000);

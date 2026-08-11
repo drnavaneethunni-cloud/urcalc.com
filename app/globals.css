@@ -562,3 +562,11 @@ table.rates .current-tag {
 table.amort tr.breakeven-row td {
   background: var(--accent-soft); font-weight: 700; color: var(--ink);
 }
+
+/* ── Ad fallback styles ── */
+ins.adsbygoogle {
+  background: transparent !important;
+}
+ins.adsbygoogle[data-ad-status="unfilled"] {
+  display: none !important;
+}

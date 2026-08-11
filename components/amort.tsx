@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { ScheduleRow } from "@/lib/finance";
-import { fmtC, fmtCents } from "@/lib/format";
+import { useCurrency } from "@/components/CurrencyProvider";
 
 /** Zero-dependency SVG chart: balance line + cumulative interest area. */
 export function BalanceChart({ schedule, principalC }: { schedule: ScheduleRow[]; principalC: number }) {
@@ -55,6 +55,7 @@ export function BalanceChart({ schedule, principalC }: { schedule: ScheduleRow[]
 }
 
 export function AmortTable({ schedule }: { schedule: ScheduleRow[] }) {
+  const { fmtC, fmtCents } = useCurrency();
   const [expanded, setExpanded] = useState(false);
   if (schedule.length === 0) return null;
 
