@@ -145,7 +145,7 @@ const itemVariants = {
 };
 
 export default function Home() {
-  const currency = useCurrency();
+  const { currency } = useCurrency();
   return (
     <div className="container">
       <JsonLd data={siteSchema} />

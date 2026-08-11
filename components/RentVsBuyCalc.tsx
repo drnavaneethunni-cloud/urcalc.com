@@ -43,7 +43,7 @@ function initialFactors(): AhpFactorState[] {
 }
 
 export default function RentVsBuyCalc({ preset }: { preset?: RentVsBuyPreset }) {
-  const currency = useCurrency();
+  const { currency } = useCurrency();
   const d = DEFAULT_RENT_VS_BUY_INPUTS;
   const [homePrice, setHomePrice] = useState(preset?.homePrice ?? d.homePrice);
   const [downPaymentPct, setDownPaymentPct] = useState(d.downPaymentPct);

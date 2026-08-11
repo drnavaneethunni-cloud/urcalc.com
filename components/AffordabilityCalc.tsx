@@ -12,7 +12,7 @@ function readParam(sp: URLSearchParams, key: string, fallback: number): number {
 }
 
 export default function AffordabilityCalc() {
-  const currency = useCurrency();
+  const { currency } = useCurrency();
   const [income, setIncome] = useState(95000);
   const [debts, setDebts] = useState(400);
   const [down, setDown] = useState(40000);
