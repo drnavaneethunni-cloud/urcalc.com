@@ -261,6 +261,7 @@ export interface AhpFactorDef {
   label: string;
   question: string;
   examples: string[];
+  directionStep: number;
 }
 
 export const AHP_FACTORS: AhpFactorDef[] = [
@@ -269,30 +270,35 @@ export const AHP_FACTORS: AhpFactorDef[] = [
     label: "Security",
     question: "How important is feeling secure about where you live?",
     examples: ["Stable home", "Children's schooling", "Long-term roots", "Family security", "Peace of mind"],
+    directionStep: 7,
   },
   {
     key: "freedom",
     label: "Freedom",
     question: "How important is having the freedom to change your plans in life?",
     examples: ["Career opportunities", "Relocating", "Business", "Travel", "Flexibility"],
+    directionStep: -7,
   },
   {
     key: "achievement",
     label: "Achievement",
     question: "How important is owning a home as a personal life goal?",
     examples: ["Pride", "Sense of accomplishment", "Building something of your own", "Personal milestone", "Identity"],
+    directionStep: 7,
   },
   {
     key: "financialComfort",
-    label: "Financial Comfort",
-    question: "Which housing choice gives you greater financial peace of mind?",
-    examples: ["Comfortable monthly payments", "Cash available for emergencies", "Low financial stress", "Long-term confidence", "Investment flexibility"],
+    label: "Financial Predictability",
+    question: "How important is having a fixed, predictable housing payment over the long term?",
+    examples: ["Protection from rent hikes", "Long-term planning", "Fixed-rate mortgage stability", "No surprises"],
+    directionStep: 7,
   },
   {
     key: "convenience",
     label: "Convenience",
-    question: "How important is having fewer day-to-day responsibilities?",
-    examples: ["Maintenance", "Repairs", "Unexpected problems", "Time commitment", "Simplicity"],
+    question: "How important is having fewer day-to-day responsibilities and unexpected costs?",
+    examples: ["No maintenance", "No surprise repairs", "Landlord handles issues", "Time commitment", "Simplicity"],
+    directionStep: -7,
   },
 ];
 
@@ -301,7 +307,6 @@ export const WEIGHT_STEP_MAX = 7;
 /** Sensible non-zero defaults: money still matters, but each factor has a
  *  real (moderate) say from the moment the page loads. */
 export const DEFAULT_WEIGHT_STEP = -2;
-export const DEFAULT_DIRECTION_STEP = 0;
 
 /** AHP-style ratio for a weight-vs-money step: magnitude = |step|+1, ratio =
  *  magnitude when the factor outweighs money, 1/magnitude when money wins.
@@ -336,17 +341,9 @@ export function directionStepToBuyShare(step: number): number {
   return clampNum(0.5 + step / (2 * WEIGHT_STEP_MAX), 0, 1, 0.5);
 }
 
-export function directionStepWording(step: number): string {
-  if (step === 0) return "Neutral";
-  const bucket = magnitudeBucket(step);
-  const lean = bucket === "a little" ? "Leans slightly" : bucket === "more" ? "Leans" : "Strongly favors";
-  return step > 0 ? `${lean} toward buying` : `${lean} toward renting`;
-}
-
 export interface AhpFactorState {
   key: AhpFactorDef["key"];
   weightStep: number;
-  directionStep: number;
 }
 
 export interface AhpWeightEntry {
@@ -385,7 +382,10 @@ export function computeAhp(
   const factorWeights = factorRatios.map((r) => r / total);
 
   const moneyShare = moneyBuyShare(finalDiff, homePrice);
-  const factorShares = factorStates.map((f) => directionStepToBuyShare(f.directionStep));
+  const factorShares = factorStates.map((f) => {
+    const def = AHP_FACTORS.find((d) => d.key === f.key);
+    return directionStepToBuyShare(def ? def.directionStep : 0);
+  });
 
   const buyScore = moneyWeight * moneyShare + factorWeights.reduce((s, w, i) => s + w * factorShares[i], 0);
   const rentScore = 1 - buyScore;

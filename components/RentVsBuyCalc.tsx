@@ -9,9 +9,7 @@ import {
   WEIGHT_STEP_MIN,
   WEIGHT_STEP_MAX,
   DEFAULT_WEIGHT_STEP,
-  DEFAULT_DIRECTION_STEP,
   weightStepWording,
-  directionStepWording,
   type RentVsBuyInputs,
   type AhpFactorState,
 } from "@/lib/rentVsBuy";
@@ -40,7 +38,6 @@ function initialFactors(): AhpFactorState[] {
   return AHP_FACTORS.map((f) => ({
     key: f.key,
     weightStep: DEFAULT_WEIGHT_STEP,
-    directionStep: DEFAULT_DIRECTION_STEP,
   }));
 }
 
@@ -183,16 +180,6 @@ export default function RentVsBuyCalc({ preset }: { preset?: RentVsBuyPreset }) 
                     leftLabel="Money matters much more"
                     rightLabel="This matters much more"
                     wording={weightStepWording(state.weightStep)}
-                  />
-                  <DiscreteSlider
-                    label="Which option better satisfies this need?"
-                    min={WEIGHT_STEP_MIN}
-                    max={WEIGHT_STEP_MAX}
-                    value={state.directionStep}
-                    onChange={(v) => updateFactor(factor.key, "directionStep", v)}
-                    leftLabel="Renting"
-                    rightLabel="Buying"
-                    wording={directionStepWording(state.directionStep)}
                   />
                 </div>
               );
