@@ -95,6 +95,7 @@ const tools = [
     title: "Rent vs. Buy Calculator",
     tag: "New",
     icon: icons.rentBuy,
+    featured: true,
     desc: "The full financial comparison, plus five simple questions about what matters to you in life.",
   },
   {
