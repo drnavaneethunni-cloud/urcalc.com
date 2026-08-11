@@ -412,6 +412,7 @@ function VerdictCallout({
   ahp: ReturnType<typeof computeAhp>;
   yearsStaying: number;
 }) {
+  const { fmtC } = useCurrency();
   const monthlyGap = Math.abs(res.finalDiff) / (yearsStaying * 12);
   const combined: "buying" | "renting" | "even" = ahp.buyScore > 0.5 ? "buying" : ahp.buyScore < 0.5 ? "renting" : "even";
   const margin = Math.round(Math.abs(ahp.buyScore * 100 - 50) * 2);
@@ -503,6 +504,7 @@ function YearTable({
   rows: { year: number; homeValue: number; loanBalance: number; equityAfterSelling: number; netWorthBuying: number; netWorthRenting: number; diff: number }[];
   breakEvenYear: number | null;
 }) {
+  const { fmtC } = useCurrency();
   if (rows.length === 0) return null;
   return (
     <div className="panel chart-panel">
