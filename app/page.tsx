@@ -76,18 +76,21 @@ const tools = [
     href: "/auto-loan-calculator",
     title: "Auto Loan Calculator",
     icon: icons.auto,
+    featured: true,
     desc: "Monthly payment, total interest, and true cost of ownership. Trade-in and negative equity included.",
   },
   {
     href: "/personal-loan-calculator",
     title: "Personal Loan Calculator",
     icon: icons.personal,
+    featured: true,
     desc: "Origination fee and effective APR, so you can compare offers on the number that actually matters.",
   },
   {
     href: "/affordability-calculator",
     title: "Affordability Calculator",
     icon: icons.afford,
+    featured: true,
     desc: "How much house you can afford using the standard 28/36 debt-to-income rule.",
   },
   {
@@ -102,18 +105,21 @@ const tools = [
     href: "/compound-interest-calculator",
     title: "Compound Interest",
     icon: icons.compound,
+    featured: true,
     desc: "Visualize how your money grows over time with monthly contributions and compounding returns.",
   },
   {
     href: "/roi-calculator",
     title: "ROI Calculator",
     icon: icons.roi,
+    featured: true,
     desc: "Calculate your net profit, total return on investment, and annualized yield to compare assets.",
   },
   {
     href: "/bmi-calculator",
     title: "BMI Calculator",
     icon: icons.bmi,
+    featured: true,
     desc: "Calculate your Body Mass Index (BMI) to see if you are in a healthy weight range based on your height.",
   },
 ];
