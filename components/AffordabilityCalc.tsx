@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { affordability } from "@/lib/finance";
 import { fmtC, fmtCents, fmtPct } from "@/lib/format";
+import { useCurrency } from "@/components/CurrencyProvider";
 import { NumField, ToggleGroup, StatementRow, CompositionBar, ShareButtons } from "@/components/ui";
 
 function readParam(sp: URLSearchParams, key: string, fallback: number): number {
@@ -11,6 +12,7 @@ function readParam(sp: URLSearchParams, key: string, fallback: number): number {
 }
 
 export default function AffordabilityCalc() {
+  const currency = useCurrency();
   const [income, setIncome] = useState(95000);
   const [debts, setDebts] = useState(400);
   const [down, setDown] = useState(40000);
@@ -73,15 +75,15 @@ export default function AffordabilityCalc() {
       <div className="calc-grid">
         <div className="panel">
           <div className="eyebrow" style={{ marginBottom: 20 }}>Your Finances</div>
-          <NumField label="Gross annual income" value={income} onChange={setIncome} prefix="$" />
+          <NumField label="Gross annual income" value={income} onChange={setIncome} prefix={currency.symbol} />
           <NumField
             label="Other monthly debts"
             hint="car loans, student loans, minimum credit card payments"
             value={debts}
             onChange={setDebts}
-            prefix="$"
+            prefix={currency.symbol}
           />
-          <NumField label="Down payment available" value={down} onChange={setDown} prefix="$" />
+          <NumField label="Down payment available" value={down} onChange={setDown} prefix={currency.symbol} />
           <div className="field-row">
             <NumField label="Interest rate" value={rate} onChange={setRate} suffix="%" step={0.05} max={30} />
             <ToggleGroup
@@ -101,7 +103,7 @@ export default function AffordabilityCalc() {
             <NumField label="Home insurance" hint="% of home price / yr" value={insPct} onChange={setInsPct} suffix="%" step={0.05} max={5} />
           </div>
           <div className="field-row">
-            <NumField label="HOA fees" hint="per month" value={hoa} onChange={setHoa} prefix="$" />
+            <NumField label="HOA fees" hint="per month" value={hoa} onChange={setHoa} prefix={currency.symbol} />
             <NumField label="PMI rate" hint="if under 20% down" value={pmiRate} onChange={setPmiRate} suffix="%/yr" step={0.1} max={5} />
           </div>
           <div className="eyebrow" style={{ margin: "32px 0 20px" }}>Debt-to-Income Limits</div>

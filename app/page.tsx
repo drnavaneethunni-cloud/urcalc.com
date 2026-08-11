@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { JsonLd, SITE } from "@/components/seo";
 import { AdUnit } from "@/components/Ads";
+import { useCurrency } from "@/components/CurrencyProvider";
 
 const siteSchema = {
   "@context": "https://schema.org",
@@ -144,6 +145,7 @@ const itemVariants = {
 };
 
 export default function Home() {
+  const currency = useCurrency();
   return (
     <div className="container">
       <JsonLd data={siteSchema} />
@@ -191,11 +193,11 @@ export default function Home() {
         <div className="related" style={{ marginTop: 12 }}>
           {[350, 400, 500, 450, 600, 200].map((k) => (
             <Link key={k} href={`/mortgage/${k * 1000}-mortgage-payment`}>
-              ${k}K mortgage payment
+              {currency.symbol}{k}K mortgage payment
             </Link>
           ))}
-          <Link href="/rent-vs-buy/350000-home">$350K rent vs. buy</Link>
-          <Link href="/rent-vs-buy/500000-home">$500K rent vs. buy</Link>
+          <Link href="/rent-vs-buy/350000-home">{currency.symbol}350K rent vs. buy</Link>
+          <Link href="/rent-vs-buy/500000-home">{currency.symbol}500K rent vs. buy</Link>
           <Link href="/guides/rent-vs-buy">Rent vs. buy guide</Link>
         </div>
       </div>

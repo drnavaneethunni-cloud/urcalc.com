@@ -23,6 +23,7 @@ import {
   ShareButtons,
   DiscreteSlider,
 } from "@/components/ui";
+import { useCurrency } from "@/components/CurrencyProvider";
 
 export interface RentVsBuyPreset {
   homePrice?: number;
@@ -42,6 +43,7 @@ function initialFactors(): AhpFactorState[] {
 }
 
 export default function RentVsBuyCalc({ preset }: { preset?: RentVsBuyPreset }) {
+  const currency = useCurrency();
   const d = DEFAULT_RENT_VS_BUY_INPUTS;
   const [homePrice, setHomePrice] = useState(preset?.homePrice ?? d.homePrice);
   const [downPaymentPct, setDownPaymentPct] = useState(d.downPaymentPct);
@@ -216,7 +218,7 @@ export default function RentVsBuyCalc({ preset }: { preset?: RentVsBuyPreset }) 
           <div className="calc-grid">
             <div className="panel">
               <div className="eyebrow" style={{ marginBottom: 20 }}>The Home</div>
-              <NumField label="Home price" value={homePrice} onChange={setHomePrice} prefix="$" />
+              <NumField label="Home price" value={homePrice} onChange={setHomePrice} prefix={currency.symbol} />
               <NumField label="Down payment" hint="% of home price" value={downPaymentPct} onChange={setDownPaymentPct} suffix="%" step={1} max={100} />
               <div className="field-row">
                 <NumField label="Mortgage rate" value={mortgageRatePct} onChange={setMortgageRatePct} suffix="%" step={0.05} max={30} />
@@ -233,7 +235,7 @@ export default function RentVsBuyCalc({ preset }: { preset?: RentVsBuyPreset }) 
               </div>
 
               <div className="eyebrow" style={{ margin: "32px 0 20px" }}>The Alternative</div>
-              <NumField label="Monthly rent" hint="equivalent unit today" value={monthlyRent} onChange={setMonthlyRent} prefix="$" />
+              <NumField label="Monthly rent" hint="equivalent unit today" value={monthlyRent} onChange={setMonthlyRent} prefix={currency.symbol} />
               <div className="field-row">
                 <NumField label="Rent growth" value={rentGrowthPct} onChange={setRentGrowthPct} suffix="%/yr" step={0.1} max={20} />
                 <NumField label="Investment return" hint="on invested cash" value={investmentReturnPct} onChange={setInvestmentReturnPct} suffix="%/yr" step={0.1} max={30} />
@@ -246,10 +248,10 @@ export default function RentVsBuyCalc({ preset }: { preset?: RentVsBuyPreset }) 
                   <div className="eyebrow" style={{ marginBottom: 16 }}>Ongoing Ownership Costs</div>
                   <div className="field-row">
                     <NumField label="Property tax" hint="% of value / yr" value={propertyTaxPct} onChange={setPropertyTaxPct} suffix="%" step={0.05} max={5} />
-                    <NumField label="Home insurance" hint="per year" value={homeInsuranceAnnual} onChange={setHomeInsuranceAnnual} prefix="$" />
+                    <NumField label="Home insurance" hint="per year" value={homeInsuranceAnnual} onChange={setHomeInsuranceAnnual} prefix={currency.symbol} />
                   </div>
                   <div className="field-row">
-                    <NumField label="HOA" hint="per month" value={hoaMonthly} onChange={setHoaMonthly} prefix="$" />
+                    <NumField label="HOA" hint="per month" value={hoaMonthly} onChange={setHoaMonthly} prefix={currency.symbol} />
                     <NumField label="Maintenance" hint="% of value / yr" value={maintenancePct} onChange={setMaintenancePct} suffix="%" step={0.1} max={5} />
                   </div>
 
@@ -260,7 +262,7 @@ export default function RentVsBuyCalc({ preset }: { preset?: RentVsBuyPreset }) 
                   </div>
                   <div className="field-row">
                     <NumField label="Home appreciation" value={appreciationPct} onChange={setAppreciationPct} suffix="%/yr" step={0.1} max={20} />
-                    <NumField label="Renter's insurance" hint="per year" value={rentersInsuranceAnnual} onChange={setRentersInsuranceAnnual} prefix="$" />
+                    <NumField label="Renter's insurance" hint="per year" value={rentersInsuranceAnnual} onChange={setRentersInsuranceAnnual} prefix={currency.symbol} />
                   </div>
                   <NumField label="General inflation" hint="HOA, insurance, other costs" value={inflationPct} onChange={setInflationPct} suffix="%/yr" step={0.1} max={20} />
 
@@ -274,8 +276,8 @@ export default function RentVsBuyCalc({ preset }: { preset?: RentVsBuyPreset }) 
                     <NumField label="Capital gains rate" hint="on invested growth" value={capitalGainsRatePct} onChange={setCapitalGainsRatePct} suffix="%" step={1} max={50} />
                   </div>
                   <div className="field-row">
-                    <NumField label="Standard deduction" hint="2026, MFJ" value={standardDeduction} onChange={setStandardDeduction} prefix="$" />
-                    <NumField label="SALT cap" hint="2026" value={saltCap} onChange={setSaltCap} prefix="$" />
+                    <NumField label="Standard deduction" hint="2026, MFJ" value={standardDeduction} onChange={setStandardDeduction} prefix={currency.symbol} />
+                    <NumField label="SALT cap" hint="2026" value={saltCap} onChange={setSaltCap} prefix={currency.symbol} />
                   </div>
                 </div>
               </details>
