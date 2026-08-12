@@ -7,6 +7,7 @@ import { ADSENSE_CLIENT_ID, CONSENT_DEFAULT_SCRIPT } from "@/lib/adsConfig";
 import { ThemeProvider } from "next-themes";
 import { CurrencyProvider } from "@/components/CurrencyProvider";
 import { HeaderActions } from "@/components/HeaderActions";
+import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 
@@ -118,6 +119,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               </div>
             </footer>
             <ConsentBanner />
+            <Analytics />
           </CurrencyProvider>
         </ThemeProvider>
       </body>
